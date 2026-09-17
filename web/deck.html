@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>性格色彩 · 四色完整解析</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%23D4594A'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%234A6FA5'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23C8922A'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%233A8E6A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ============ 主题色(默认:🖋 墨水经典) ============
+       切换主题:从 references/themes.md 复制对应的 :root 块
+       整体替换这几行(--ink / --ink-rgb / --paper / --paper-rgb)
+       其他地方散落的 rgba() 都走 var(--ink-rgb) / var(--paper-rgb),无需逐处改 */
+    --ink:#0a0a0b;
+    --ink-rgb:10,10,11;
+    --paper:#f1efea;
+    --paper-rgb:241,239,234;
+    --paper-tint:#e8e5de;
+    --ink-tint:#18181a;
+
+    /* ============ 字体(跨主题固定) ============ */
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --serif-en:"Playfair Display","Source Serif 4",Georgia,serif;
+    --serif-body-en:"Source Serif 4",Georgia,serif;
+    --serif-zh:"Noto Serif SC",source-han-serif-sc,serif;
+    --sans-zh:"Noto Sans SC",source-han-sans-sc,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);color:var(--paper);font-family:var(--sans-zh);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+  /* ============ WebGL 双背景 ============ */
+  canvas.bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;transition:opacity 1.2s ease}
+  canvas#bg-light{opacity:0}
+  canvas#bg-dark{opacity:1}
+  body.light-bg canvas#bg-light{opacity:1}
+  body.light-bg canvas#bg-dark{opacity:0}
+  body.low-power canvas.bg{display:none!important}
+
+  /* ============ Deck 容器 + 翻页 ============ */
+  /* width: NSLIDES * 100vw，会在 JS 里动态矫正 */
+  #deck{position:fixed;inset:0;width:10000vw;height:100vh;display:flex;flex-wrap:nowrap;transition:transform .9s cubic-bezier(.77,0,.175,1);z-index:10;will-change:transform}
+  .slide{width:100vw;height:100vh;flex:0 0 100vw;position:relative;padding:6vh 6vw 10vh 6vw;display:flex;flex-direction:column;overflow:hidden}
+  .slide.light{color:var(--ink);background:var(--paper)}
+  .slide.dark{color:var(--paper);background:var(--ink)}
+
+  /* 默认页：遮罩较厚，保证文字可读 */
+  .slide::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;transition:background .7s ease}
+  .slide.light::before{background:rgba(var(--paper-rgb),.78);backdrop-filter:blur(3px)}
+  .slide.dark::before{background:rgba(var(--ink-rgb),.78);backdrop-filter:blur(3px)}
+  /* Hero 页：遮罩大幅降低，让 WebGL 背景明显透出 */
+  .slide.hero.light::before{background:rgba(var(--paper-rgb),.16);backdrop-filter:none}
+  .slide.hero.dark::before{background:rgba(var(--ink-rgb),.12);backdrop-filter:none}
+  /* Hero 页顶底微弱渐隐，保证 chrome/foot 区域可读 */
+  .slide.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+  .slide.hero.light::after{background:linear-gradient(180deg,rgba(var(--paper-rgb),.28) 0%,rgba(var(--paper-rgb),0) 14%,rgba(var(--paper-rgb),0) 86%,rgba(var(--paper-rgb),.28) 100%)}
+  .slide.hero.dark::after{background:linear-gradient(180deg,rgba(var(--ink-rgb),.32) 0%,rgba(var(--ink-rgb),0) 14%,rgba(var(--ink-rgb),0) 86%,rgba(var(--ink-rgb),.32) 100%)}
+
+  /* ============ Magazine chrome：顶部 meta + 底部 foot ============ */
+  .chrome{display:flex;justify-content:space-between;align-items:flex-start;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+  .chrome .left,.chrome .right{display:flex;gap:2.4em;align-items:center}
+  .chrome .sep{width:40px;height:1px;background:currentColor;opacity:.4}
+  .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.55}
+  .foot .title{font-family:var(--serif-zh);font-weight:400;letter-spacing:.05em;text-transform:none;opacity:.75;font-size:13px}
+
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;padding:6px 14px;border:1px solid currentColor;opacity:.85}
+  .rule{width:100%;height:1px;background:currentColor;opacity:.25;margin:3vh 0}
+  .rule.v{width:1px;height:100%;margin:0}
+
+  /* ============ 字体规则 ============
+     · 衬线（Noto Serif SC / Playfair）：大标题、重点金句、数字
+     · 非衬线（Noto Sans SC）：正文描述、body、补充说明
+     · 等宽（IBM Plex Mono）：kicker、meta 小标签、foot 右侧
+  */
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;opacity:.6;margin-bottom:2.6vh}
+  .display{font-family:var(--serif-en);font-weight:700;font-size:11vw;line-height:.92;letter-spacing:-.025em}
+  .display-zh{font-family:var(--serif-zh);font-weight:700;font-size:7.8vw;line-height:1.04;letter-spacing:-.005em}
+  .h1-zh{font-family:var(--serif-zh);font-weight:700;font-size:4.6vw;line-height:1.12;letter-spacing:-.005em}
+  .h2-zh{font-family:var(--serif-zh);font-weight:600;font-size:3.2vw;line-height:1.2;letter-spacing:0}
+  .h3-zh{font-family:var(--serif-zh);font-weight:500;font-size:1.9vw;line-height:1.35}
+  .body-zh{font-family:var(--sans-zh);font-weight:400;font-size:max(15px,1.22vw);line-height:1.75;opacity:.82;letter-spacing:.01em}
+  .body-serif{font-family:var(--serif-zh);font-weight:400;font-size:max(15px,1.3vw);line-height:1.65;opacity:.88}
+  .lead{font-family:var(--serif-zh);font-weight:400;font-size:1.9vw;line-height:1.4;opacity:.85}
+  .meta{font-family:var(--mono);font-size:max(11px,.88vw);letter-spacing:.16em;text-transform:uppercase;opacity:.6}
+  .big-num{font-family:var(--serif-en);font-weight:800;font-size:10vw;line-height:.85;letter-spacing:-.03em;font-feature-settings:"tnum"}
+  .mid-num{font-family:var(--serif-en);font-weight:700;font-size:5.5vw;line-height:.88;letter-spacing:-.02em;font-feature-settings:"tnum"}
+  .ghost{font-family:var(--serif-en);font-weight:900;font-size:34vw;line-height:.8;opacity:.06;letter-spacing:-.04em;position:absolute;font-feature-settings:"tnum"}
+  em{font-style:italic;font-family:var(--serif-en)}
+  .en{font-family:var(--serif-en);font-style:italic;font-weight:500}
+
+  /* ============ 布局工具 ============ */
+  .col{display:flex;flex-direction:column;gap:2.4vh}
+  .row{display:flex;align-items:center;gap:3vw}
+  .grid-6{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:4vw 6vw;flex:1;align-content:center;padding:2vh 0}
+  .grid-9{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3vh 4vw;flex:1;align-content:center}
+  .grid-4{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:4vh 6vw;flex:1;align-content:center}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:4vw;flex:1;align-content:center}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:4vw;flex:1;align-items:center}
+  .split-55{display:grid;grid-template-columns:55fr 45fr;gap:5vw;flex:1;align-items:stretch}
+  .fill{flex:1}
+  .center{align-items:center;justify-content:center;text-align:center}
+  .bottom-left{position:absolute;left:6vw;bottom:9vh;max-width:50vw}
+  .bottom-right{position:absolute;right:6vw;bottom:9vh;max-width:50vw;text-align:right}
+  .top-right{position:absolute;right:6vw;top:6vh;text-align:right}
+
+  /* ============ Stat（数字矩阵） ============ */
+  .stat{display:flex;flex-direction:column;gap:1vh;align-items:flex-start}
+  .stat .n{font-family:var(--serif-en);font-weight:800;font-size:8vw;line-height:.88;letter-spacing:-.03em;font-feature-settings:"tnum"}
+  .stat .l{font-family:var(--sans-zh);font-size:max(13px,1.05vw);opacity:.7;margin-top:1vh;font-weight:400;line-height:1.5}
+  .stat .m{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.5;margin-bottom:.2vh}
+
+  /* ============ Callout（引用框） ============ */
+  .callout{padding:3vh 2.4vw;border-left:3px solid currentColor;position:relative;font-family:var(--serif-zh);font-size:max(15px,1.2vw);line-height:1.55;opacity:.92}
+  .slide.light .callout{background:rgba(var(--ink-rgb),.05)}
+  .slide.dark .callout{background:rgba(var(--paper-rgb),.06)}
+  .callout .cite{display:block;margin-top:1.6vh;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
+  .callout .q-big{font-family:var(--serif-zh);font-weight:600;font-size:max(17px,1.6vw);line-height:1.42}
+
+  /* ============ Platform（平台卡） ============ */
+  .plat{display:flex;flex-direction:column;justify-content:flex-end;padding:2vh 0;border-top:1px solid currentColor;border-color:rgba(127,127,127,.35)}
+  .plat .name{font-family:var(--serif-zh);font-weight:700;font-size:1.8vw;margin-bottom:.6vh}
+  .plat .nb{font-family:var(--serif-en);font-weight:700;font-size:3.2vw;letter-spacing:-.02em;line-height:1;font-feature-settings:"tnum"}
+  .plat .sub{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.55;margin-top:.6vh}
+  .plat .fill{font-family:var(--sans-zh);font-weight:300;font-size:2.4vw;opacity:.28;letter-spacing:-.01em;line-height:1}
+
+  /* ============ Rowline（表格行） ============ */
+  .rowline{display:grid;grid-template-columns:1fr 2fr 1fr;gap:2vw;padding:2.2vh 0;border-top:1px solid currentColor;align-items:center;border-color:rgba(127,127,127,.25)}
+  .rowline:last-child{border-bottom:1px solid currentColor;border-color:rgba(127,127,127,.25)}
+  .rowline .k{font-family:var(--serif-zh);font-weight:700;font-size:1.7vw}
+  .rowline .v{font-family:var(--sans-zh);font-weight:400;font-size:max(14px,1.2vw);opacity:.85;line-height:1.55}
+  .rowline .m{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.6;justify-self:end}
+
+  /* ============ Pillar（支柱卡片） ============ */
+  .pillar{display:flex;flex-direction:column;gap:1.8vh}
+  .pillar .ic{font-family:var(--serif-en);font-style:italic;font-size:2.6vw;opacity:.45;font-weight:400}
+  .pillar .ic svg{width:2.8vw;height:2.8vw;stroke-width:1.2;opacity:.7}
+  .pillar .t{font-family:var(--serif-zh);font-weight:700;font-size:2.4vw;line-height:1.1}
+  .pillar .d{font-family:var(--sans-zh);font-weight:400;font-size:max(14px,1.1vw);opacity:.76;line-height:1.6}
+
+  /* ============ Signature / Highlight ============ */
+  .sign{font-family:var(--serif-en);font-style:italic;font-weight:500;font-size:2vw;opacity:.7}
+  .hi{position:relative;display:inline}
+  .slide.dark .hi::after{content:"";position:absolute;left:-.1em;right:-.1em;bottom:-.05em;height:.28em;background:rgba(var(--paper-rgb),.15);z-index:-1}
+  .slide.light .hi::after{content:"";position:absolute;left:-.1em;right:-.1em;bottom:-.05em;height:.28em;background:rgba(var(--ink-rgb),.08);z-index:-1}
+
+  /* ============ Icons（Lucide via CDN） ============ */
+  .ico{width:1em;height:1em;display:inline-block;vertical-align:-.12em;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .ico-lg,.ico-md,.ico-sm{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+  .ico-lg{width:2.6vw;height:2.6vw;stroke-width:1.2;display:inline-block}
+  .ico-md{width:1.8vw;height:1.8vw;stroke-width:1.3;display:inline-block;vertical-align:-.4em}
+  .ico-sm{width:1.1vw;height:1.1vw;stroke-width:1.4;display:inline-block;vertical-align:-.15em;opacity:.7}
+
+  /* ============ 图片占位（虚线框，提示设计师位置） ============ */
+  .img-slot{border:1.5px dashed rgba(127,127,127,.4);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1vh;padding:2vh 2vw;font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;opacity:.55;position:relative;aspect-ratio:16/9;width:100%;max-height:56vh;margin-inline:auto;box-sizing:border-box}
+  .img-slot::before{content:"";position:absolute;inset:8px;border:1px solid currentColor;opacity:.2}
+  .img-slot .plus{font-size:2vw;font-weight:300;opacity:.5;letter-spacing:0}
+  .img-slot .label{position:relative;z-index:2;text-align:center}
+  .img-slot.r-4x3{aspect-ratio:4/3}
+  .img-slot.r-3x2{aspect-ratio:3/2}
+  .img-slot.r-1x1{aspect-ratio:1/1}
+
+  /* ============ 图片实填框（关键：固定高度 + 只裁底部） ============
+     重要约束：高度用内联 height:Nvh 精确控制，不要用 aspect-ratio（会撑破布局）
+     object-position:top center 保证严禁裁剪顶部和左右，只裁剪底部
+  */
+  .frame-img{overflow:hidden;position:relative;background:rgba(0,0,0,.04);box-sizing:border-box;width:100%;border-radius:4px}
+  .slide.dark .frame-img{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+  .frame-img > img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+  .frame-img.fit-contain > img{object-fit:contain;object-position:center center}
+  .frame-img.r-16x9{aspect-ratio:16/9;max-height:64vh}
+  .frame-img.r-16x10{aspect-ratio:16/10;max-height:56vh}
+  .frame-img.r-4x3{aspect-ratio:4/3;max-height:56vh}
+  .frame-img.r-3x2{aspect-ratio:3/2;max-height:46vh}
+  .frame-img.r-3x4{aspect-ratio:3/4;max-height:60vh}
+  .frame-img.r-1x1{aspect-ratio:1/1;max-height:50vh}
+  .frame-img.h-16{height:16vh}
+  .frame-img.h-18{height:18vh}
+  .frame-img.h-22{height:22vh}
+  .frame-img.h-26{height:26vh}
+  .frame-img.h-28{height:28vh}
+  .frame-cap{display:flex;justify-content:space-between;align-items:baseline;gap:1vw;margin-top:.8vh;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.72}
+  .frame-cap .pf{font-family:var(--serif-zh);font-weight:600;font-size:max(13px,1vw);letter-spacing:.04em;text-transform:none;opacity:.94}
+  .frame-cap .nb{font-family:var(--serif-en);font-style:italic;font-size:max(15px,1.2vw);letter-spacing:.02em;text-transform:none;opacity:.88}
+  .frame-cap .idx{font-family:var(--mono);opacity:.5}
+  figure.tile{display:flex;flex-direction:column;margin:0;min-width:0}
+  figure.tile > .frame-img{flex:0 0 auto}
+
+  /* ============ 导航 ============ */
+  #nav{position:fixed;left:50%;bottom:2.6vh;transform:translateX(-50%);z-index:30;display:flex;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  #nav .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .3s ease;border:0;padding:0}
+  #nav .dot:hover{background:rgba(255,255,255,.5);transform:scale(1.15)}
+  #nav .dot.active{background:rgba(255,255,255,.95);width:22px;border-radius:999px}
+  body.light-bg #nav{background:rgba(255,255,255,.25)}
+  body.light-bg #nav .dot{background:rgba(var(--ink-rgb),.25)}
+  body.light-bg #nav .dot.active{background:rgba(var(--ink-rgb),.9)}
+  #hint{position:fixed;bottom:3vh;right:3vw;z-index:30;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.4;mix-blend-mode:difference;color:#aaa}
+  body.low-power #hint{opacity:.72;color:var(--paper);mix-blend-mode:normal}
+  body.light-bg.low-power #hint{color:var(--ink)}
+
+  /* ============================================================
+     ============ LAYOUTS API · 面向 agent 的类（v2）============
+     所有 layouts.md 中的骨架都基于下面这套命名。
+     如果你在 layouts.md 里看到某个类，它必须在下面有定义。
+     ============================================================ */
+
+  /* ---------- .frame：每页主内容容器 ---------- */
+  .frame{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  /* 当 .frame 同时加了 grid 类时，grid 的 display:grid 覆盖 flex */
+  .frame.grid-2-7-5,
+  .frame.grid-2-6-6,
+  .frame.grid-2-8-4,
+  .frame.grid-3-3,
+  .frame.grid-6{display:grid}
+
+  /* ---------- 标题层级（API 名称，衬线为主） ---------- */
+  .h-hero{
+    font-family:var(--serif-zh);
+    font-weight:900;
+    font-size:10vw;
+    line-height:.96;
+    letter-spacing:-.02em;
+  }
+  .h-xl{
+    font-family:var(--serif-zh);
+    font-weight:700;
+    font-size:6.2vw;
+    line-height:1.08;
+    letter-spacing:-.01em;
+  }
+  .h-sub{
+    font-family:var(--serif-zh);
+    font-weight:500;
+    font-size:3.1vw;
+    line-height:1.25;
+    letter-spacing:0;
+    opacity:.7;
+  }
+  .h-md{
+    font-family:var(--serif-zh);
+    font-weight:600;
+    font-size:2.3vw;
+    line-height:1.3;
+  }
+  /* 英文标题专用（Playfair 衬线） */
+  .h-hero-en,.h-xl-en{font-family:var(--serif-en);letter-spacing:-.025em}
+
+  /* ---------- lead 引语 ---------- */
+  .lead{
+    font-family:var(--serif-zh);
+    font-weight:400;
+    font-size:1.75vw;
+    line-height:1.5;
+    opacity:.86;
+  }
+
+  /* ---------- meta-row 底部元数据 ---------- */
+  .meta-row{
+    display:flex;
+    gap:1.2em;
+    align-items:baseline;
+    flex-wrap:wrap;
+    font-family:var(--mono);
+    font-size:max(12px,.92vw);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+
+  /* ---------- stat-card（数据大字报用） ---------- */
+  .stat-card{
+    display:flex;
+    flex-direction:column;
+    gap:.8vh;
+    align-items:flex-start;
+    padding-top:1.6vh;
+    border-top:1px solid currentColor;
+    border-color:rgba(127,127,127,.3);
+  }
+  .stat-card .stat-label{
+    font-family:var(--mono);
+    font-size:max(10px,.78vw);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    opacity:.55;
+  }
+  .stat-card .stat-nb{
+    font-family:var(--serif-en);
+    font-weight:800;
+    font-size:5.8vw;
+    line-height:.9;
+    letter-spacing:-.03em;
+    font-feature-settings:"tnum";
+    margin-top:.4vh;
+  }
+  .stat-card .stat-nb .stat-unit{
+    font-family:var(--serif-zh);
+    font-weight:500;
+    font-size:.38em;
+    letter-spacing:0;
+    opacity:.72;
+    margin-left:.14em;
+  }
+  .stat-card .stat-note{
+    font-family:var(--sans-zh);
+    font-weight:400;
+    font-size:max(13px,1.05vw);
+    line-height:1.5;
+    opacity:.72;
+    margin-top:.6vh;
+  }
+  /* 当 stat-card 用于 grid-4（2x2），数字适度放大；若页面有标题+引文在上方，可内联 style 覆盖为更小值 */
+  .grid-4 .stat-card .stat-nb{font-size:5vw}
+  /* 当只有 3 个，字也可以稍大 */
+  .grid-3 .stat-card .stat-nb{font-size:6.8vw}
+
+  /* ---------- pipeline（流水线） ---------- */
+  .pipeline-section{
+    margin-top:4.4vh;
+    padding-top:2.8vh;
+    border-top:1px dashed rgba(127,127,127,.32);
+  }
+  .pipeline-section:first-of-type{
+    border-top:0;
+    padding-top:0;
+    margin-top:3vh;
+  }
+  .pipeline-label{
+    font-family:var(--mono);
+    font-size:max(11px,.85vw);
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    opacity:.62;
+    margin-bottom:2.2vh;
+  }
+  .pipeline{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1.2vw;
+  }
+  .pipeline[data-cols="3"]{grid-template-columns:repeat(3,1fr)}
+  .pipeline[data-cols="4"]{grid-template-columns:repeat(4,1fr)}
+  .pipeline[data-cols="6"]{grid-template-columns:repeat(6,1fr)}
+  .step{
+    display:flex;
+    flex-direction:column;
+    gap:.8vh;
+    padding-top:1.4vh;
+    border-top:1px solid currentColor;
+    border-color:rgba(127,127,127,.35);
+  }
+  .step-nb{
+    font-family:var(--serif-en);
+    font-style:italic;
+    font-weight:500;
+    font-size:1.15vw;
+    opacity:.45;
+  }
+  .step-title{
+    font-family:var(--sans-zh);
+    font-weight:700;
+    font-size:1.55vw;
+    letter-spacing:.01em;
+    line-height:1.2;
+  }
+  .step-desc{
+    font-family:var(--sans-zh);
+    font-weight:400;
+    font-size:max(12px,.95vw);
+    line-height:1.45;
+    opacity:.72;
+  }
+
+  /* ---------- 网格（layouts.md 所用） ---------- */
+  /* 这些类独立挂到任何容器上都能生效，不依赖 .frame 复合选择器 */
+  .grid-2-7-5{display:grid;grid-template-columns:7fr 5fr;gap:3vw 4vh;align-items:start}
+  .grid-2-6-6{display:grid;grid-template-columns:1fr 1fr;gap:3vw 4vh;align-items:start}
+  .grid-2-8-4{display:grid;grid-template-columns:8fr 4fr;gap:3vw 4vh;align-items:start}
+  .grid-3-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-auto-rows:minmax(0,1fr);
+    gap:2.4vh 2vw;
+  }
+  /* grid-6 已在旧样式里定义为 3x2，这里仅补 align */
+
+  /* ---------- 图片 frame-img（layouts.md 主命名） ---------- */
+  /* 在旧样式里已定义，这里补 img-cap 命名别名与增强 */
+  figure.frame-img{margin:0;display:flex;flex-direction:column;min-width:0}
+  .img-cap{
+    display:block;
+    margin-top:.8vh;
+    font-family:var(--mono);
+    font-size:max(10px,.8vw);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+  /* callout src 命名别名 */
+  .callout-src{
+    display:block;
+    margin-top:1.6vh;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+
+  /* ---------- chrome & foot 补位（layouts.md 简单写法） ---------- */
+  .chrome{font-family:var(--mono);font-size:max(11px,.78vw);letter-spacing:.2em;text-transform:uppercase;opacity:.62}
+  .foot{font-family:var(--mono);font-size:max(11px,.78vw);letter-spacing:.18em;text-transform:uppercase;opacity:.5}
+
+  /* ============ 动效系统(Motion One 驱动) ============
+     所有 [data-anim] 元素默认隐藏,进入页面时由 JS 逐个揭示。
+     - cascade(默认):按 DOM 顺序 stagger 120ms 淡入 + y:16→0
+     - hero(hero 页自动):慢一点的 stagger 180ms
+     - quote(含 [data-anim="line"]):逐行 600ms 淡入
+     - directional(含 [data-anim="left|right"]):左→分隔线→右
+     - pipeline(data-animate="pipeline"):Space/→ 手动推进
+     Motion One 没加载成功时(CDN 断 + 本地丢),所有 [data-anim] 会兜底显示。
+  */
+  [data-anim]{opacity:1}
+  body.motion-ready [data-anim]{opacity:0}
+  body.motion-ready [data-anim="left"]{transform:translateX(-24px)}
+  body.motion-ready [data-anim="right"]{transform:translateX(24px)}
+  body.motion-ready [data-anim="line"]{opacity:0;transform:translateY(10px)}
+  body.motion-ready [data-animate="pipeline"] [data-anim]{opacity:.15}
+  body.low-power #deck{transition:none!important}
+  body.low-power *,
+  body.low-power *::before,
+  body.low-power *::after{animation:none!important;transition:none!important}
+  body.low-power.motion-ready [data-anim],
+  body.low-power [data-anim]{opacity:1!important;transform:none!important}
+
+  /* ---------- 响应式降级 ---------- */
+  @media (max-width:900px){
+    .display{font-size:16vw}
+    .display-zh{font-size:12vw}
+    .h1-zh{font-size:7vw}
+    .h-hero{font-size:14vw}
+    .h-xl{font-size:9vw}
+    .pipeline{grid-template-columns:repeat(2,1fr)}
+    .grid-2-7-5,.grid-2-6-6,.grid-2-8-4{grid-template-columns:1fr}
+  }
+
+  /* ---- 补齐 layouts.md 用到但模板未定义的 stat 子组件 ---- */
+  .stat-label{font-family:var(--mono);font-size:max(11px,.82vw);letter-spacing:.14em;
+    text-transform:uppercase;opacity:.55;margin-bottom:.9vh}
+  .stat-nb{font-family:var(--serif-en);font-size:max(30px,3.4vw);font-weight:500;
+    line-height:1;letter-spacing:-.01em}
+  .stat-unit{font-family:var(--sans-zh);font-size:max(13px,1.05vw);opacity:.6;
+    letter-spacing:0}
+  .stat-note{font-family:var(--sans-zh);font-size:max(12px,.95vw);opacity:.62;
+    margin-top:.9vh;line-height:1.5}
+  /* ---- 四色卡：左侧色条 + 色名 ---- */
+  .cc{border-left:3px solid var(--cc,var(--ink));padding:1.6vh 1.4vw;background:var(--paper-tint)}
+  .cc-name{font-family:var(--serif-zh);font-size:max(17px,1.5vw);font-weight:600;
+    color:var(--cc,var(--ink));letter-spacing:.02em}
+  .cc-motto{font-family:var(--sans-zh);font-size:max(12px,.95vw);opacity:.6;
+    font-style:italic;margin-top:.5vh}
+  .cc-line{font-family:var(--sans-zh);font-size:max(12.5px,1vw);line-height:1.75;
+    margin-top:.7vh}
+  .cc-line b{font-weight:500}
+  .li{font-family:var(--sans-zh);font-size:max(12.5px,1vw);line-height:1.85;
+    padding-left:1.1em;position:relative}
+  .li:before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;
+    border-radius:50%;background:var(--cc,currentColor);opacity:.75}
+  /* ---- 内容密集页用的紧凑卡：同页放 8 组信息时不溢出 ---- */
+  .cc-tight{padding:1.1vh .95vw}
+  .cc-tight .cc-name{font-size:max(13px,1.05vw)}
+  .cc-tight .li{font-size:max(11px,.86vw);line-height:1.52}
+  .cc-sep{margin-top:1.2vh;padding-top:1.1vh;
+    border-top:1px solid rgba(var(--ink-rgb),.14)}
+
+  </style>
+</head>
+<body>
+<script>
+  (function(){
+    const KEY = 'guizang-ppt-low-power';
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stored = localStorage.getItem(KEY);
+    window.__lowPowerMode = stored === '1' || (stored === null && reduced);
+    function updateHint(){
+      const hint = document.getElementById('hint');
+      if(hint) hint.textContent = `← → 翻页 · B ${window.__lowPowerMode ? '动态' : '静态'} · ESC 索引`;
+    }
+    window.__setLowPowerMode = function(on, opts={}){
+      window.__lowPowerMode = !!on;
+      document.body.classList.toggle('low-power', window.__lowPowerMode);
+      if(opts.persist !== false) localStorage.setItem(KEY, window.__lowPowerMode ? '1' : '0');
+      if(window.__lowPowerMode && document.getAnimations){
+        document.getAnimations().forEach(a=>a.cancel());
+      }
+      updateHint();
+      dispatchEvent(new CustomEvent('ppt-low-power-change', {detail:{on:window.__lowPowerMode}}));
+      if(window.__playSlide) window.__playSlide(window.__currentSlideIndex || 0);
+    };
+    document.body.classList.toggle('low-power', window.__lowPowerMode);
+    addEventListener('DOMContentLoaded', updateHint, {once:true});
+  })();
+</script>
+
+<canvas id="bg-dark" class="bg"></canvas>
+<canvas id="bg-light" class="bg"></canvas>
+<div id="hint">← → 翻页 · B 静态 · ESC 索引</div>
+
+<div id="deck">
+
+<!-- ============================================================
+     SLIDES 插入区 · 在此处填充所有 <section class="slide ..."> 页面
+     每页模板参考 references/page-patterns.md
+     页面组件参考 references/components.md
+     ============================================================ -->
+
+<section class="slide hero dark">
+  <div class="chrome">
+    <div>Color Personality · 培训讲义</div>
+    <div>Vol.01</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="frame" style="display:grid;gap:4vh;align-content:center;min-height:78vh">
+      <div class="kicker" data-anim>四种性格色彩 · 完整解析</div>
+      <h1 class="h-hero" data-anim>性格色彩</h1>
+      <h2 class="h-sub" data-anim>红 蓝 黄 绿</h2>
+      <p class="lead" style="max-width:58vw" data-anim>
+        没有哪一种颜色更好，只有哪一种更像你。看清自己的长处与过当，
+        也看懂别人为什么和你不一样。
+      </p>
+      <div class="meta-row" data-anim>
+        <span>30 道题</span><span>·</span><span>4 种色彩</span><span>·</span><span>一套协作语言</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>内容整理自性格色彩培训讲义</div>
+    <div>— 2026 —</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>四色总览 · Overview</div>
+    <div>01 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>先认识四个主角</div>
+    <h2 class="h-xl" data-anim>四种基本性格色彩</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">红色</div>
+        <div class="cc-motto">“让我使你高兴！”</div>
+        <div class="cc-line">长处 <b>其乐融融</b></div>
+        <div class="cc-line">短处 <b>三心二意</b></div>
+        <div class="cc-line">动机 <b>快乐 · 赞美 · 受欢迎</b></div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">蓝色</div>
+        <div class="cc-motto">“没有最好，只有更好”</div>
+        <div class="cc-line">长处 <b>追求完美</b></div>
+        <div class="cc-line">短处 <b>过于苛刻</b></div>
+        <div class="cc-line">动机 <b>卓越 · 价值 · 高质量</b></div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">黄色</div>
+        <div class="cc-motto">“没有越不过的障碍！能者为先。”</div>
+        <div class="cc-line">长处 <b>让任何人贯彻自己的意图</b></div>
+        <div class="cc-line">短处 <b>忽视过程和他人感受</b></div>
+        <div class="cc-line">动机 <b>挑战 · 选择 · 控制</b></div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">绿色</div>
+        <div class="cc-motto">“不求快，但求稳。”</div>
+        <div class="cc-line">长处 <b>易于相处</b></div>
+        <div class="cc-line">短处 <b>怯懦</b></div>
+        <div class="cc-line">动机 <b>安全感 · 欣赏 · 保障</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>每种色彩都有长处与短处</div>
+    <div>Overview</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>红色 · 档案</div>
+    <div>3 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim style="color:#D4594A">红色性格 · 核心档案</div>
+    <h2 class="h-xl" data-anim>“让我使你高兴！”</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">最大的长处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>其乐融融</b></div>
+        <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>三心二意</b></div>
+      </div>
+      <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
+        <div class="cc" style="--cc:#D4594A">
+          <div class="cc-name">基本动机</div>
+          <div class="cc-line">快乐 · 赞美 · 受欢迎</div>
+        </div>
+        <div class="cc" style="--cc:#D4594A">
+          <div class="cc-name">对外界的需求</div>
+          <div class="cc-line">声望 · 友好的人际关系 · 影响鼓舞他人的机会</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>红色 · 长处 / 短处 / 动机 / 需求</div>
+    <div>Profile</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>红色 · 优势与过当</div>
+    <div>4 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>优势用过头，就是过当</div>
+    <h2 class="h-xl" data-anim>红色：优势 与 优势过当</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">优势</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">善于交际</div><div class="li">积极乐观</div><div class="li">信任他人</div><div class="li">创造快乐</div><div class="li">富有色彩</div><div class="li">表达力强</div></div>
+      </div>
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">情绪波动</div><div class="li">缺少秩序</div><div class="li">难以兑现</div><div class="li">半途而废</div><div class="li">没有计划</div><div class="li">言过其实</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>红色 · 6 条优势 / 6 条过当</div>
+    <div>Strengths</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>红色 · 人与团队</div>
+    <div>5 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>典型人物</div>
+    <h2 class="h-xl" data-anim style="color:#D4594A">克林顿</h2>
+    <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>演讲的高手，爱好广泛，虽然经历了莱温斯基事件，仍旧无法阻止他在全球的影响力；在离开政坛以后他仍旧活跃，在当前的驴象之争中仍旧积极为民主党煽风点火。</p>
+    <div class="grid-3" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">发挥优势时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">提供帮助和指导给有需要的人</div><div class="li">强烈拥护团队和组织的价值观与目标</div><div class="li">设下很美好的远景并全力以赴</div></div>
+      </div>
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">严密控制</div><div class="li">全面的程序条理和方法</div><div class="li">付诸逻辑事实和系统</div></div>
+      </div>
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">运用优势得当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">愿意培训属下和团队成员</div><div class="li">对环境的压力和要求很敏感</div><div class="li">提供帮助给组织内外的人</div><div class="li">自告奋勇的积极团队奉献者</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>红色 · 典型人物与团队贡献</div>
+    <div>Team</div>
+  </div>
+</section>
+
+<section class="slide hero light">
+  <div class="chrome">
+    <div>色彩解析 · 蓝色</div>
+    <div>Act 2 · 5 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
+      <div class="kicker" data-anim>Act 2</div>
+      <h1 class="h-hero" style="font-size:8.5vw;color:#4A6FA5" data-anim>蓝色</h1>
+      <p class="lead" style="max-width:52vw" data-anim>“没有最好，只有更好”</p>
+    </div>
+  </div>
+  <div class="foot">
+    <div>蓝色性格解析</div>
+    <div>Act 2</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>蓝色 · 档案</div>
+    <div>6 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim style="color:#4A6FA5">蓝色性格 · 核心档案</div>
+    <h2 class="h-xl" data-anim>“没有最好，只有更好”</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">最大的长处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>追求完美</b></div>
+        <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>过于苛刻</b></div>
+      </div>
+      <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
+        <div class="cc" style="--cc:#4A6FA5">
+          <div class="cc-name">基本动机</div>
+          <div class="cc-line">卓越 · 价值 · 高质量</div>
+        </div>
+        <div class="cc" style="--cc:#4A6FA5">
+          <div class="cc-name">对外界的需求</div>
+          <div class="cc-line">明确的解释 · 有限的风险 · 要求计划性和精确性的任务</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>蓝色 · 长处 / 短处 / 动机 / 需求</div>
+    <div>Profile</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>蓝色 · 优势与过当</div>
+    <div>7 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>优势用过头，就是过当</div>
+    <h2 class="h-xl" data-anim>蓝色：优势 与 优势过当</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">优势</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">高度敏感</div><div class="li">善于分析</div><div class="li">品质至上</div><div class="li">原则性强</div><div class="li">思想深沉</div><div class="li">稳健谦和</div></div>
+      </div>
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">行动缓慢</div><div class="li">抓小失大</div><div class="li">要求苛刻</div><div class="li">灵活性差</div><div class="li">冷漠严肃</div><div class="li">过于小心</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>蓝色 · 6 条优势 / 6 条过当</div>
+    <div>Strengths</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>蓝色 · 人与团队</div>
+    <div>8 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>典型人物</div>
+    <h2 class="h-xl" data-anim style="color:#4A6FA5">爱迪生</h2>
+    <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>最伟大的发明家，为寻求一个方案，可以做几百次实验毫不放弃。在关于白炽灯的研究过程中他的名言是：没有放弃的原因是因为我发现了 2000 次它不发光的原因。他的工厂每个人前面的座右铭是：“有更好的方法…去发现它”。</p>
+    <div class="grid-3" style="margin-top:5vh">
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">发挥优势时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">解析问题及提供事实逻辑，以有条理的方式得到解决方法</div><div class="li">寻求对资源最有效的利用</div><div class="li">放弃前会探询其他所有可能性</div></div>
+      </div>
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">所有问题考虑前不愿采取行动</div><div class="li">原则性太强，不易妥协</div></div>
+      </div>
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">运用优势得当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">制定计划</div><div class="li">督控工作事项</div><div class="li">拟定程序</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>蓝色 · 典型人物与团队贡献</div>
+    <div>Team</div>
+  </div>
+</section>
+
+<section class="slide hero dark">
+  <div class="chrome">
+    <div>色彩解析 · 黄色</div>
+    <div>Act 3 · 8 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
+      <div class="kicker" data-anim>Act 3</div>
+      <h1 class="h-hero" style="font-size:8.5vw;color:#C8922A" data-anim>黄色</h1>
+      <p class="lead" style="max-width:52vw" data-anim>“没有越不过的障碍！能者为先。”</p>
+    </div>
+  </div>
+  <div class="foot">
+    <div>黄色性格解析</div>
+    <div>Act 3</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>黄色 · 档案</div>
+    <div>9 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim style="color:#C8922A">黄色性格 · 核心档案</div>
+    <h2 class="h-xl" data-anim>“没有越不过的障碍！能者为先。”</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">最大的长处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>让任何人贯彻自己的意图</b></div>
+        <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>忽视过程和他人感受</b></div>
+      </div>
+      <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
+        <div class="cc" style="--cc:#C8922A">
+          <div class="cc-name">基本动机</div>
+          <div class="cc-line">挑战 · 选择 · 控制</div>
+        </div>
+        <div class="cc" style="--cc:#C8922A">
+          <div class="cc-name">对外界的需求</div>
+          <div class="cc-line">权威 · 艰巨的任务 · 进取的机会</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>黄色 · 长处 / 短处 / 动机 / 需求</div>
+    <div>Profile</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>黄色 · 优势与过当</div>
+    <div>10 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>优势用过头，就是过当</div>
+    <h2 class="h-xl" data-anim>黄色：优势 与 优势过当</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">优势</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">目标导向</div><div class="li">领导力强</div><div class="li">追求效率</div><div class="li">坚持到底</div><div class="li">独立意识</div><div class="li">敢于冒险</div></div>
+      </div>
+      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">自负骄傲</div><div class="li">缺乏耐心</div><div class="li">感受第二</div><div class="li">倍感压力</div><div class="li">忽略人际</div><div class="li">行为冲动</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>黄色 · 6 条优势 / 6 条过当</div>
+    <div>Strengths</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>黄色 · 人与团队</div>
+    <div>11 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>典型人物</div>
+    <h2 class="h-xl" data-anim style="color:#C8922A">邱吉尔</h2>
+    <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>永不放弃！永不放弃！永不放弃！！！</p>
+    <div class="grid-3" style="margin-top:5vh">
+      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">发挥优势时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">开创行动导向</div><div class="li">喜欢讨论意见</div><div class="li">变革中觉得自然，并极力推动</div><div class="li">有决断并愿冒风险</div></div>
+      </div>
+      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">不容忍别人的意见和想法</div><div class="li">权威化，不易妥协</div><div class="li">意气用事</div></div>
+      </div>
+      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">运用优势得当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">推动计划的实施</div><div class="li">指挥一个任务和计划</div><div class="li">组织动员人力和资源</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>黄色 · 典型人物与团队贡献</div>
+    <div>Team</div>
+  </div>
+</section>
+
+<section class="slide hero light">
+  <div class="chrome">
+    <div>色彩解析 · 绿色</div>
+    <div>Act 4 · 11 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
+      <div class="kicker" data-anim>Act 4</div>
+      <h1 class="h-hero" style="font-size:8.5vw;color:#3A8E6A" data-anim>绿色</h1>
+      <p class="lead" style="max-width:52vw" data-anim>“不求快，但求稳。”</p>
+    </div>
+  </div>
+  <div class="foot">
+    <div>绿色性格解析</div>
+    <div>Act 4</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>绿色 · 档案</div>
+    <div>12 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim style="color:#3A8E6A">绿色性格 · 核心档案</div>
+    <h2 class="h-xl" data-anim>“不求快，但求稳。”</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">最大的长处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>易于相处</b></div>
+        <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
+        <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>怯懦</b></div>
+      </div>
+      <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
+        <div class="cc" style="--cc:#3A8E6A">
+          <div class="cc-name">基本动机</div>
+          <div class="cc-line">安全感 · 欣赏 · 保障</div>
+        </div>
+        <div class="cc" style="--cc:#3A8E6A">
+          <div class="cc-name">对外界的需求</div>
+          <div class="cc-line">群体认同 · 既定的工作模式 · 稳定的情况</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>绿色 · 长处 / 短处 / 动机 / 需求</div>
+    <div>Profile</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>绿色 · 优势与过当</div>
+    <div>13 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>优势用过头，就是过当</div>
+    <h2 class="h-xl" data-anim>绿色：优势 与 优势过当</h2>
+    <div class="grid-2-6-6" style="margin-top:5vh">
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">优势</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">人际导向</div><div class="li">宽容处事</div><div class="li">善于外交</div><div class="li">适应性强</div><div class="li">擅对压力</div><div class="li">乐天知命</div></div>
+      </div>
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当</div>
+        <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">牺牲目标</div><div class="li">放弃原则</div><div class="li">不够快速</div><div class="li">没有主见</div><div class="li">旁观免参</div><div class="li">避难求易</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>绿色 · 6 条优势 / 6 条过当</div>
+    <div>Strengths</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>绿色 · 人与团队</div>
+    <div>14 / 20</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>典型人物</div>
+    <h2 class="h-xl" data-anim style="color:#3A8E6A">福特</h2>
+    <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>最好把他当作一位世界外交官，而不是一个精明的政治家。他流露的是仁慈和宁静的尊严，他从不显露出狂热的个人主义，只是静悄悄地行走。</p>
+    <div class="grid-3" style="margin-top:5vh">
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">发挥优势时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">处理人际关系手腕高明</div><div class="li">耐心且适应性强</div></div>
+      </div>
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name" style="opacity:.62">优势过当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">冲突无法解决</div><div class="li">改变立场，不坚持自己的原则</div></div>
+      </div>
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">运用优势得当时</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">必须传达敏感或为难的信息时</div><div class="li">需要能借协商而化解冲突的情况</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>绿色 · 典型人物与团队贡献</div>
+    <div>Team</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>四色对比 · 团队合作</div>
+    <div>14 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>放在一起看</div>
+    <h2 class="h-xl" data-anim>四种色彩在团队里的样子</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">红色</div>
+        <div class="cc-line" style="margin-top:1vh">特别适合解决方方面面都要照顾或需一些新颖的办法来解决问题</div>
+        <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：容易各行其是，每个成员朝不同方向走，善于出谋划策但不善于贯彻执行，善始善终</div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">蓝色</div>
+        <div class="cc-line" style="margin-top:1vh">属于细致入微、一丝不苟的完美主义者</div>
+        <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：容易过分计较小节而贻误大局</div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">黄色</div>
+        <div class="cc-line" style="margin-top:1vh">工作效率高，喜欢迎接挑战，遇事时喜欢当机立断</div>
+        <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：过于看重速度、效率，对问题和情况的分析缺乏耐心，常会忽略一些中间环节</div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">绿色</div>
+        <div class="cc-line" style="margin-top:1vh">善于合作、协同配合，及回避成员间的明争暗斗</div>
+        <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：成员间彼此不会靠得太近，工作群体容易迷失方向</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>团队合作中的优势与过当</div>
+    <div>Compare</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>协作 · 沟通</div>
+    <div>15 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>减少耗费在人际关系上的精力</div>
+    <h2 class="h-xl" data-anim>怎么和每种色彩沟通</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">和红色沟通</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">采用幽默的方式</div><div class="li">用理想化的表达方式</div><div class="li">要求他们协助</div><div class="li">表示重视</div></div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">和蓝色沟通</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">运用逻辑与结构</div><div class="li">找出新旧事物的关联</div><div class="li">提供分析的机会</div><div class="li">提出低风险的构想</div></div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">和黄色沟通</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">提供机会</div><div class="li">强调挑战性</div><div class="li">赋予更多责任授权</div></div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">和绿色沟通</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">提供与别人共事的机会</div><div class="li">让他们知道你高兴</div><div class="li">强调值得做的理由</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®沟通</div>
+    <div>Communication</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>协作 · 管理</div>
+    <div>16 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>向上与向下</div>
+    <h2 class="h-xl" data-anim>如何影响上司 · 如何带领部属</h2>
+    <div class="grid-4" style="margin-top:3vh">
+      <div class="cc cc-tight" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">上司：怎么影响 TA</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">善于交际</div><div class="li">精通世故</div><div class="li">团队为重</div></div>
+        <div class="cc-sep">
+          <div class="cc-name">部属：怎么带 TA</div>
+          <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">给予肯定、信任与赞赏</div><div class="li">展现幽默感</div><div class="li">具有弹性</div><div class="li">给予有助益的回应</div></div>
+        </div>
+      </div>      <div class="cc cc-tight" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">上司：怎么影响 TA</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">遵循规章</div><div class="li">讲求逻辑</div><div class="li">专心一致</div></div>
+        <div class="cc-sep">
+          <div class="cc-name">部属：怎么带 TA</div>
+          <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">条理分明，目的清楚</div><div class="li">重视细节，有系统性</div><div class="li">客观合理，前后一致</div></div>
+        </div>
+      </div>      <div class="cc cc-tight" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">上司：怎么影响 TA</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">迅速反应</div><div class="li">独立作业</div><div class="li">直接了当</div></div>
+        <div class="cc-sep">
+          <div class="cc-name">部属：怎么带 TA</div>
+          <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">表现自信</div><div class="li">在平等基础上争论</div><div class="li">奖励成果</div><div class="li">提供自主机会</div></div>
+        </div>
+      </div>      <div class="cc cc-tight" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">上司：怎么影响 TA</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">表达忠诚</div><div class="li">态度真诚</div><div class="li">处事技巧</div></div>
+        <div class="cc-sep">
+          <div class="cc-name">部属：怎么带 TA</div>
+          <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">表示了解，加以鼓励</div><div class="li">给予推动和引导</div><div class="li">容易亲近</div><div class="li">可被信赖</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®管理</div>
+    <div>Management</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>职业 · 方向</div>
+    <div>17 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>让优势发挥得更好</div>
+    <h2 class="h-xl" data-anim>职业发展方向</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">适合的方向</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">热情待人</div><div class="li">热切表达自己的想法</div><div class="li">容易吸引人注意</div></div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">适合的方向</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">留意细节，思考深刻</div><div class="li">记录、制图、制表</div><div class="li">分析别人弄不清的问题</div></div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">适合的方向</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">需要迅速做出抉择</div><div class="li">必须尽快完成的事情</div><div class="li">要求强烈的控制力</div><div class="li">和权威的领域</div></div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">适合的方向</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">调节和团结的角色</div><div class="li">平静风暴的最佳人选</div><div class="li">别人认为沉闷的日常例行工作</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®职业生涯规划</div>
+    <div>Career</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>职业 · 领导</div>
+    <div>18 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>带人也有色彩</div>
+    <h2 class="h-xl" data-anim>领导品质和风格</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">领导品质和风格</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">民主化的领导者和朋友</div><div class="li">提供工作之外的社交环境</div><div class="li">对能力给予充分认可</div><div class="li">营造兴奋的气氛</div></div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">领导品质和风格</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">给予保障</div><div class="li">明确的执行标准</div><div class="li">注重细节</div><div class="li">公平公正</div></div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">领导品质和风格</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">提供直接的答复</div><div class="li">强调目标</div><div class="li">提供适当的压力</div><div class="li">提供个人成长的空间</div></div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">领导品质和风格</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">和蔼可亲</div><div class="li">给予时间去适应计划中的变化</div><div class="li">友善地服务他人</div><div class="li">允许别人按照自己的步调工作</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®领导</div>
+    <div>Leadership</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>销售 · 客户</div>
+    <div>19 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>换个位置看</div>
+    <h2 class="h-xl" data-anim>作为客户，他们是什么样</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">作为客户</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">不喜欢冲突</div><div class="li">热情有加</div><div class="li">关心自己的形象，在意别人的赞美</div><div class="li">喜欢革新，讨厌陈旧</div><div class="li">对色彩性的描述有兴趣</div></div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">作为客户</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">需要了解产品的工作程序</div><div class="li">喜欢解决问题的过程</div><div class="li">喜欢自己的精确谨慎受到别人的推崇</div><div class="li">更喜欢由他们自己来完成任务</div></div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">作为客户</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">务实不务虚</div><div class="li">欢迎变化和新的机遇</div><div class="li">害怕强卖</div><div class="li">对感情态度和观念保持低调</div><div class="li">独立、有进取心</div></div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">作为客户</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">对冲突的忍耐力极低</div><div class="li">尽可能回避风险和变革</div><div class="li">需要一步步知道自己期望什么</div><div class="li">需要知道他们将得到支持</div><div class="li">没有推动和难做决定</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®销售</div>
+    <div>Customer</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>服务 · 抱怨</div>
+    <div>20 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>出了问题时</div>
+    <h2 class="h-xl" data-anim>客户抱怨时，他们需要什么</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">抱怨时需要什么</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">对他们个人的注意</div><div class="li">快节奏</div><div class="li">显示他们的地位</div><div class="li">看到不必投入更多努力</div><div class="li">口头“交易”口角</div></div>
+      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">抱怨时需要什么</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">表明他们是对的</div><div class="li">把这件事情的过程和细节和盘向他们托出</div><div class="li">欣赏他们的认真和精益求精的作风</div><div class="li">确保公正和公平</div></div>
+      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">抱怨时需要什么</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">实质性的进展</div><div class="li">快节奏</div><div class="li">他们控制了局势</div><div class="li">结果</div><div class="li">节省时间</div></div>
+      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">抱怨时需要什么</div>
+        <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">保证他们个人没事</div><div class="li">承诺危机很快会结束</div><div class="li">向他们建议，一起努力来解决问题</div><div class="li">表明你们的关系将不会受到影响</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®客户服务</div>
+    <div>Complaint</div>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="chrome">
+    <div>培训 · 组织</div>
+    <div>21 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>课堂上与组织里</div>
+    <h2 class="h-xl" data-anim>培训中的表现</h2>
+    <div class="grid-4" style="margin-top:5vh">
+      <div class="cc cc-tight" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">培训中的表现</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">充满热忱能感染别人</div><div class="li">想象力非常丰富</div><div class="li">花样百出的人</div><div class="li">非常幽默</div><div class="li">故事讲得非常精彩</div><div class="li">只要和人在一起，马上就充满活力</div></div>
+      </div>      <div class="cc cc-tight" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">培训中的表现</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">很注重事情的精确性</div><div class="li">喜欢仔细思索后再发言</div><div class="li">经常表现严肃</div><div class="li">有好质疑的头脑</div><div class="li">对关键性的细节很感兴趣</div><div class="li">享受自己独处的时间</div></div>
+      </div>      <div class="cc cc-tight" style="--cc:#C8922A" data-anim>
+        <div class="cc-name">培训中的表现</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">很有自信和见解</div><div class="li">不容易分心</div><div class="li">据实说出自己的想法</div><div class="li">不会屈服于强势，做自己不愿做的事</div><div class="li">坦白直率</div><div class="li">精力旺盛</div></div>
+      </div>      <div class="cc cc-tight" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">培训中的表现</div>
+        <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">有一种可以使他人镇静的影响力</div><div class="li">不喜欢冲突和惹事生非</div><div class="li">有耐心善解人意的听众</div><div class="li">按部就班，毫不急躁</div><div class="li">善于关怀和接纳</div><div class="li">喜欢事情的作法被一步步解说清楚</div></div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:4vh;max-width:70vw" data-anim>
+      团队不能发挥其功效的最大原因是：成员的个性差别被无端忽视。
+    </p>
+  </div>
+  <div class="foot">
+    <div>FPA®培训 / 团队合作</div>
+    <div>Training</div>
+  </div>
+</section>
+
+<section class="slide hero dark">
+  <div class="chrome">
+    <div>延伸 · 生活</div>
+    <div>22 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="frame" style="display:grid;gap:3.5vh;align-content:center;min-height:78vh">
+      <div class="kicker" data-anim>不止于工作</div>
+      <h1 class="h-hero" style="font-size:6.4vw" data-anim>婚恋 与 教育</h1>
+      <div style="display:grid;gap:1.4vh;max-width:62vw;margin-top:2vh" data-anim>
+        <div class="li">更好地理解你的爱人</div>
+        <div class="li">欣赏伴侣的不同之处，以及他对这段关系的独特贡献</div>
+        <div class="li">认识到冲突的原因，平心静气坐下来双向讨论怎么解决</div>
+        <div class="li">肯定双方对婚姻的贡献</div>
+        <div class="li">认识到配偶在关系中得不到满足的需要</div>
+        <div class="li">重新认识自己的行为，适当调整以满足双方需要</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>FPA®婚恋关系 / 子女教育</div>
+    <div>Beyond Work</div>
+  </div>
+</section>
+
+<section class="slide light">
+  <div class="chrome">
+    <div>收束 · Takeaway</div>
+    <div>23 / 22</div>
+  </div>
+  <div class="frame" style="padding-top:5vh">
+    <div class="kicker" data-anim>带上这三句话走</div>
+    <h2 class="h-xl" data-anim>了解自己 · 理解他人 · 高效协作</h2>
+    <div class="grid-3" style="margin-top:6vh">
+      <div class="cc" style="--cc:#D4594A" data-anim>
+        <div class="cc-name">先看清自己</div>
+        <div class="cc-line">你的长处是什么，它用过头会变成什么样。</div>
+      </div>
+      <div class="cc" style="--cc:#4A6FA5" data-anim>
+        <div class="cc-name">再理解他人</div>
+        <div class="cc-line">别人不是针对你，他只是另一种颜色。</div>
+      </div>
+      <div class="cc" style="--cc:#3A8E6A" data-anim>
+        <div class="cc-name">最后换方式</div>
+        <div class="cc-line">用对方需要的方式沟通，而不是你自己习惯的方式。</div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:5vh;max-width:64vw" data-anim>
+      没有最好，只有更好。
+    </p>
+  </div>
+  <div class="foot">
+    <div>内容整理自性格色彩培训讲义 · 仅作学习交流</div>
+    <div>Takeaway</div>
+  </div>
+</section>
+
+
+</div>
+
+<div id="nav"></div>
+
+<script>
+/* =============== WebGL 双背景 ===============
+   深色页：Holographic Dispersion（全息色散 · 钛金暗流）—— 彩虹微扰、鼠标径向涟漪
+   浅色页：Spiral Vortex（旋转涡流 · 银色珍珠）—— domain-warp 流动、无中心
+   修改风格请参考 references/webgl-backgrounds.md
+*/
+const VS = `attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}`;
+
+const FS_DARK = `precision highp float;
+uniform vec2 u_resolution;uniform float u_time;uniform vec2 u_mouse;
+vec3 palette(float t,vec3 a,vec3 b,vec3 c,vec3 d){return a+b*cos(6.28318*(c*t+d));}
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_resolution.xy;
+  vec2 p=uv*2.0-1.0;p.x*=u_resolution.x/u_resolution.y;
+  vec2 m=u_mouse*2.0-1.0;m.x*=u_resolution.x/u_resolution.y;
+  float md=length(p-m);
+  float mr=sin(md*15.0-u_time*4.0)*exp(-md*3.0);p+=mr*0.08;
+  vec2 p0=p;
+  for(float i=1.0;i<4.0;i++){
+    p.x+=0.1/i*sin(i*3.0*p.y+u_time*0.4)+0.05;
+    p.y+=0.1/i*cos(i*2.0*p.x+u_time*0.3)-0.05;
+  }
+  float r=length(p);float ang=atan(p.y,p.x);
+  vec3 a=vec3(0.12,0.12,0.13);
+  vec3 b=vec3(0.03,0.04,0.05);
+  vec3 c=vec3(1.0,1.0,1.0);
+  vec3 d=vec3(0.1,0.2,0.4);
+  vec3 col=palette(r*1.5+p0.x*0.5+u_time*0.1,a,b,c,d);
+  float disp=sin(r*25.0-u_time*1.5+ang*2.0)*0.5+0.5;
+  col+=vec3(disp*0.015,disp*0.01,disp*0.02);
+  float hi=pow(sin(p.x*4.0+p.y*3.0+u_time)*0.5+0.5,8.0);
+  col+=hi*0.08;
+  vec3 base=vec3(0.05,0.05,0.06);
+  col=mix(base,col,0.85);
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+const FS_LIGHT = `precision highp float;
+uniform vec2 u_resolution;uniform float u_time;uniform vec2 u_mouse;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){
+  vec2 i=floor(p),f=fract(p);
+  float a=hash(i),b=hash(i+vec2(1,0));
+  float c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
+  vec2 u=f*f*(3.0-2.0*f);
+  return mix(a,b,u.x)+(c-a)*u.y*(1.0-u.x)+(d-b)*u.x*u.y;
+}
+float fbm(vec2 p){
+  float v=0.0,a=0.5;
+  mat2 m=mat2(0.80,0.60,-0.60,0.80);
+  for(int i=0;i<5;i++){v+=a*noise(p);p=m*p*2.02;a*=0.5;}
+  return v;
+}
+void main(){
+  vec2 uv=gl_FragCoord.xy/u_resolution.xy;
+  vec2 p=uv;p.x*=u_resolution.x/u_resolution.y;
+  vec2 m=u_mouse;m.x*=u_resolution.x/u_resolution.y;
+  vec2 md=p-m;float dl=length(md);
+  p+=normalize(md+vec2(0.0001))*exp(-dl*5.0)*0.03;
+  vec2 q=vec2(fbm(p*1.8+u_time*0.07),fbm(p*1.8+vec2(5.2,1.3)+u_time*0.06));
+  vec2 r=vec2(fbm(p*2.0+q*1.3+vec2(1.7,9.2)+u_time*0.05),
+              fbm(p*2.0+q*1.3+vec2(8.3,2.8)+u_time*0.04));
+  float f=fbm(p*2.2+r*1.5);
+  vec3 silverDark=vec3(0.86,0.85,0.84);
+  vec3 paper=vec3(0.955,0.945,0.925);
+  vec3 col=mix(silverDark,paper,f);
+  float ph=r.x*2.2+u_time*0.35;
+  col+=vec3(0.78,0.62,0.92)*sin(ph)*0.055;
+  col+=vec3(0.55,0.72,0.95)*sin(ph*0.8+2.0)*0.05;
+  float hl=smoothstep(0.48,0.92,f);
+  col+=hl*0.06;
+  gl_FragColor=vec4(col,1.0);
+}`;
+
+const mouse={x:0.5,y:0.5};
+addEventListener('mousemove',e=>{mouse.x=e.clientX/innerWidth;mouse.y=e.clientY/innerHeight});
+
+function bootGL(canvasId, fsSrc){
+  const canvas=document.getElementById(canvasId);
+  const gl=canvas.getContext('webgl',{alpha:false,antialias:true});
+  if(!gl) return ()=>false;
+  const mk=(t,s)=>{const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);return sh};
+  const prog=gl.createProgram();
+  gl.attachShader(prog,mk(gl.VERTEX_SHADER,VS));
+  gl.attachShader(prog,mk(gl.FRAGMENT_SHADER,fsSrc));
+  gl.linkProgram(prog);gl.useProgram(prog);
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
+  const pos=gl.getAttribLocation(prog,'position');
+  gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,2,gl.FLOAT,false,0,0);
+  const lRes=gl.getUniformLocation(prog,'u_resolution');
+  const lT=gl.getUniformLocation(prog,'u_time');
+  const lM=gl.getUniformLocation(prog,'u_mouse');
+  const resize=()=>{
+    const d=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=innerWidth*d;canvas.height=innerHeight*d;
+    gl.viewport(0,0,canvas.width,canvas.height);
+  };
+  addEventListener('resize',resize);resize();
+  return (tSec)=>{
+    gl.uniform2f(lRes,canvas.width,canvas.height);
+    gl.uniform1f(lT,tSec);
+    gl.uniform2f(lM,mouse.x,1-mouse.y);
+    gl.drawArrays(gl.TRIANGLES,0,6);
+    return true;
+  };
+}
+let drawDark=null, drawLight=null, glRAF=0, glT0=Date.now();
+function startGL(){
+  if(window.__lowPowerMode || glRAF) return;
+  if(!drawDark) drawDark=bootGL('bg-dark',FS_DARK);
+  if(!drawLight) drawLight=bootGL('bg-light',FS_LIGHT);
+  glT0=Date.now();
+  function loop(){
+    if(window.__lowPowerMode){glRAF=0;return;}
+    const t=(Date.now()-glT0)/1000;
+    drawDark(t);drawLight(t);
+    glRAF=requestAnimationFrame(loop);
+  }
+  glRAF=requestAnimationFrame(loop);
+}
+function stopGL(){
+  if(glRAF) cancelAnimationFrame(glRAF);
+  glRAF=0;
+}
+startGL();
+addEventListener('ppt-low-power-change', e=>{e.detail.on ? stopGL() : startGL();});
+
+// =============== 导航（翻页 / 圆点 / 键盘 / 滚轮 / 触屏） ===============
+const deck=document.getElementById('deck');
+const slides=deck.querySelectorAll('.slide');
+const nav=document.getElementById('nav');
+let idx=0,total=slides.length,lock=false;
+
+// 关键：矫正 deck 宽度为 total * 100vw，否则翻页会错位
+deck.style.width=(total*100)+'vw';
+
+slides.forEach((s,i)=>{
+  const b=document.createElement('button');
+  b.className='dot';b.dataset.i=i;b.setAttribute('aria-label','Page '+(i+1));
+  b.onclick=()=>go(i);
+  nav.appendChild(b);
+});
+
+function go(n){
+  if(lock)return;
+  idx=Math.max(0,Math.min(total-1,n));
+  window.__currentSlideIndex = idx;
+  deck.style.transform=`translateX(${-idx*100}vw)`;
+  nav.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  /* 主题切换：优先读 data-theme，其次从 class（light/dark）推断 */
+  const el=slides[idx];
+  const th=el.dataset.theme || (el.classList.contains('light')?'light':(el.classList.contains('dark')?'dark':'dark'));
+  document.body.classList.toggle('light-bg',th==='light');
+  /* 动效：翻页过渡中段触发当前页的入场动画（由 motion-boot 注册） */
+  if(window.__playSlide) setTimeout(()=>window.__playSlide(idx), 450);
+  lock=true;setTimeout(()=>lock=false,700);
+}
+
+/* =============== ESC 索引视图 =============== */
+let overviewOn=false;
+const ov=document.createElement('div');
+ov.id='overview';
+ov.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(var(--ink-rgb),.92);backdrop-filter:blur(12px);display:none;overflow-y:auto;padding:4vh 4vw';
+document.body.appendChild(ov);
+
+function buildOverview(){
+  ov.innerHTML='';
+  const grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);gap:2vh 1.6vw;max-width:90vw;margin:0 auto';
+  slides.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.style.cssText='cursor:pointer;border-radius:6px;overflow:hidden;border:2px solid '+(i===idx?'rgba(var(--paper-rgb),.8)':'rgba(var(--paper-rgb),.15)')+';transition:border-color .2s';
+    card.onmouseenter=()=>card.style.borderColor='rgba(var(--paper-rgb),.6)';
+    card.onmouseleave=()=>card.style.borderColor=i===idx?'rgba(var(--paper-rgb),.8)':'rgba(var(--paper-rgb),.15)';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='width:100%;aspect-ratio:16/9;overflow:hidden;position:relative;pointer-events:none;background:'+(s.classList.contains('light')?'var(--paper)':'var(--ink)');
+    const clone=s.cloneNode(true);
+    clone.style.cssText='width:100vw;height:100vh;transform:scale('+(1/4.5)+');transform-origin:top left;position:absolute;top:0;left:0;pointer-events:none';
+    wrap.appendChild(clone);
+    const label=document.createElement('div');
+    label.style.cssText='padding:6px 10px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper);opacity:.7';
+    label.textContent=(i+1)+' / '+total;
+    card.appendChild(wrap);
+    card.appendChild(label);
+    card.onclick=()=>{toggleOverview();go(i)};
+    grid.appendChild(card);
+  });
+  ov.appendChild(grid);
+}
+
+function toggleOverview(){
+  overviewOn=!overviewOn;
+  if(overviewOn){buildOverview();ov.style.display='block';}
+  else{ov.style.display='none';}
+}
+
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();toggleOverview();return;}
+  if(e.key && e.key.toLowerCase()==='b' && !e.metaKey && !e.ctrlKey && !e.altKey){
+    e.preventDefault();
+    window.__setLowPowerMode(!window.__lowPowerMode);
+    return;
+  }
+  if(overviewOn)return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '||e.key==='ArrowDown'){
+    if(window.__pipeAdvance && window.__pipeAdvance()) return;
+    go(idx+1);
+    return;
+  }
+  if(e.key==='ArrowLeft'||e.key==='PageUp'||e.key==='ArrowUp')go(idx-1);
+  if(e.key==='Home')go(0);
+  if(e.key==='End')go(total-1);
+});
+
+let wheelTO=null,wheelAcc=0;
+addEventListener('wheel',e=>{
+  wheelAcc+=e.deltaY+e.deltaX;
+  if(Math.abs(wheelAcc)>50){
+    if(wheelAcc>0 && window.__pipeAdvance && window.__pipeAdvance()){
+      wheelAcc=0;
+    }else{
+      go(idx+(wheelAcc>0?1:-1));wheelAcc=0;
+    }
+  }
+  clearTimeout(wheelTO);wheelTO=setTimeout(()=>wheelAcc=0,150);
+},{passive:true});
+
+let tx=0,ty=0;
+addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{
+  const dx=(e.changedTouches[0].clientX-tx);
+  const dy=(e.changedTouches[0].clientY-ty);
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){
+    if(dx<0 && window.__pipeAdvance && window.__pipeAdvance()) return;
+    go(idx+(dx<0?1:-1));
+  }
+},{passive:true});
+
+go(0);
+</script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+
+<!-- ============ Motion One 动效引擎（本地优先,CDN 兜底） ============
+     加载策略:先 ./assets/motion.min.js(本地,离线可用),失败 fallback 到 jsDelivr CDN
+     加载完成后挂 window.__playSlide / window.__pipeAdvance,
+     导航脚本会在翻页中段调用 __playSlide(idx),键盘/滚轮/触屏会在翻页前调用 __pipeAdvance()
+     双双失败时会兜底把所有 [data-anim] 设为可见,不让动效破坏阅读
+-->
+<script type="module">
+let motion;
+try {
+  motion = await import('./assets/motion.min.js');
+} catch(e1) {
+  try {
+    motion = await import('https://cdn.jsdelivr.net/npm/motion@11.11.17/+esm');
+  } catch(e2) {
+    console.warn('[motion] local + CDN both failed, disabling animations', e1, e2);
+    document.querySelectorAll('[data-anim]').forEach(el=>{el.style.opacity='1';el.style.transform='none'});
+    document.querySelectorAll('[data-animate="pipeline"] [data-anim]').forEach(el=>el.style.opacity='1');
+  }
+}
+
+if(motion){
+  const { animate, stagger } = motion;
+  document.body.classList.add('motion-ready');
+  const EASE = [.22, 1, .36, 1];
+  const slides = [...document.querySelectorAll('.slide')];
+  let pipeStep = -1;
+  let lastIdx = -1;
+
+  function resetAnims(slide){
+    slide.querySelectorAll('[data-anim]').forEach(el=>{
+      el.style.opacity='';
+      el.style.transform='';
+    });
+  }
+
+  function revealStatic(slide){
+    resetAnims(slide);
+    document.getAnimations?.().forEach(a=>a.cancel());
+    slide.querySelectorAll('[data-anim]').forEach(el=>{
+      el.style.opacity='1';
+      el.style.transform='none';
+    });
+  }
+
+  function playSlide(i){
+    const slide = slides[i];
+    if(!slide) return;
+    lastIdx = i;
+    const recipe = slide.dataset.animate || (slide.classList.contains('hero') ? 'hero' : 'cascade');
+
+    if(window.__lowPowerMode){
+      revealStatic(slide);
+      return;
+    }
+
+    if(recipe === 'pipeline'){
+      pipeStep = -1;
+      slide.querySelectorAll('[data-anim]').forEach(el=>{
+        el.style.opacity='0.15';
+        el.style.transform='none';
+      });
+      return;
+    }
+
+    resetAnims(slide);
+    const all = [...slide.querySelectorAll('[data-anim]')];
+    if(!all.length) return;
+
+    if(recipe === 'directional'){
+      const lefts  = all.filter(el=>el.dataset.anim==='left');
+      const divs   = all.filter(el=>el.dataset.anim==='divider');
+      const rights = all.filter(el=>el.dataset.anim==='right');
+      const others = all.filter(el=>!['left','right','divider'].includes(el.dataset.anim));
+      if(others.length) animate(others, {opacity:[0,1], y:[12,0]}, {duration:.6, delay:stagger(.1, {start:.15}), easing:EASE});
+      if(lefts.length)  animate(lefts,  {opacity:[0,1], x:[-24,0]}, {duration:.8, delay:.35, easing:EASE});
+      if(divs.length)   animate(divs,   {opacity:[0,.25]},          {duration:.5, delay:.9});
+      if(rights.length) animate(rights, {opacity:[0,1], x:[24,0]},  {duration:.8, delay:1.0, easing:EASE});
+      return;
+    }
+
+    if(recipe === 'quote'){
+      const lines = all.filter(el=>el.dataset.anim==='line');
+      const others = all.filter(el=>el.dataset.anim!=='line');
+      if(others.length) animate(others, {opacity:[0,1], y:[8,0]},    {duration:.6, delay:stagger(.12, {start:.2}), easing:EASE});
+      if(lines.length)  animate(lines,  {opacity:[.35,1], y:[10,0]}, {duration:.8, delay:stagger(.55, {start:.5}), easing:EASE});
+      return;
+    }
+
+    if(recipe === 'hero'){
+      animate(all, {opacity:[0,1], y:[14,0]}, {duration:.9, delay:stagger(.16, {start:.2}), easing:EASE});
+      return;
+    }
+
+    // default: cascade
+    animate(all, {opacity:[0,1], y:[16,0]}, {duration:.75, delay:stagger(.1, {start:.15}), easing:EASE});
+  }
+
+  function pipeAdvance(){
+    if(window.__lowPowerMode) return false;
+    const slide = slides[lastIdx];
+    if(!slide || slide.dataset.animate !== 'pipeline') return false;
+    const steps  = [...slide.querySelectorAll('[data-anim="step"]')];
+    const arrows = [...slide.querySelectorAll('[data-anim="arrow"]')];
+    if(pipeStep >= steps.length - 1) return false;
+    pipeStep++;
+    animate(steps[pipeStep], {opacity:[0.15,1], y:[8,0]}, {duration:.5, easing:EASE});
+    if(pipeStep > 0 && arrows[pipeStep-1]){
+      animate(arrows[pipeStep-1], {opacity:[0.15,.7]}, {duration:.3, delay:.15});
+    }
+    return true;
+  }
+
+  window.__playSlide = playSlide;
+  window.__pipeAdvance = pipeAdvance;
+
+  // 首屏:go(0) 已跑过(同步),没来得及触发动效 → 这里补一下
+  playSlide(0);
+}
+</script>
+</body>
+</html>

@@ -246,8 +246,12 @@
       + '<section class="wrap section">'
       +   '<div class="btn-row">'
       +     '<a class="btn" href="colors.html">看四色全览</a>'
+      +     '<a class="btn btn-ghost" href="deck.html">完整详解 · 27 页演示</a>'
       +     '<button class="btn btn-ghost" id="btnAgain">重新测试</button>'
       +   '</div>'
+      +   '<p class="muted" style="margin-top:14px;font-size:12.5px">'
+      +     '上面是给你的精简版。想看培训讲义的完整内容，点「完整详解」。'
+      +   '</p>'
       + '</section>';
 
     $('#resultInner').innerHTML = html;
