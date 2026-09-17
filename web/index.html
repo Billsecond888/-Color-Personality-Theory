@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>性格色彩测评 · Color Personality</title>
+<meta name="description" content="30 道题测出你的性格主色，并给出完整的性格解析与协作建议。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%23D4594A'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%234A6FA5'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23C8922A'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%233A8E6A'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <span class="brand">性格色彩测评</span>
+    <nav class="site-nav">
+      <a href="index.html" class="is-active">测试</a>
+      <a href="colors.html">四色全览</a>
+      <a href="https://github.com/Billsecond888/color-personality">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="view is-active" data-view="start">
+    <div class="wrap" id="startInner"></div>
+  </section>
+
+  <section class="view" data-view="quiz">
+    <div id="quizInner"></div>
+  </section>
+
+  <section class="view" data-view="result">
+    <div id="resultInner"></div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    题库 30 道，解析来自性格色彩培训讲义。内容仅作学习交流，FPA® 为原权利人商标。
+    数据来源见仓库 <code>docs/解析口径.md</code>。
+  </div>
+</footer>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
