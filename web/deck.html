@@ -456,8 +456,10 @@
     margin-top:.9vh;line-height:1.5}
   /* ---- 四色卡：左侧色条 + 色名 ---- */
   .cc{border-left:3px solid var(--cc,var(--ink));padding:1.6vh 1.4vw;background:var(--paper-tint)}
+  .slide.dark .cc{background:var(--ink-tint)}
   .cc-name{font-family:var(--serif-zh);font-size:max(17px,1.5vw);font-weight:600;
-    color:var(--cc,var(--ink));letter-spacing:.02em}
+    color:var(--cc-d,var(--ink));letter-spacing:.02em}
+  .slide.dark .cc-name{color:var(--cc-l,var(--paper))}
   .cc-motto{font-family:var(--sans-zh);font-size:max(12px,.95vw);opacity:.6;
     font-style:italic;margin-top:.5vh}
   .cc-line{font-family:var(--sans-zh);font-size:max(12.5px,1vw);line-height:1.75;
@@ -549,25 +551,25 @@
     <div class="kicker" data-anim>先认识四个主角</div>
     <h2 class="h-xl" data-anim>四种基本性格色彩</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">红色</div>
         <div class="cc-motto">“让我使你高兴！”</div>
         <div class="cc-line">长处 <b>其乐融融</b></div>
         <div class="cc-line">短处 <b>三心二意</b></div>
         <div class="cc-line">动机 <b>快乐 · 赞美 · 受欢迎</b></div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">蓝色</div>
         <div class="cc-motto">“没有最好，只有更好”</div>
         <div class="cc-line">长处 <b>追求完美</b></div>
         <div class="cc-line">短处 <b>过于苛刻</b></div>
         <div class="cc-line">动机 <b>卓越 · 价值 · 高质量</b></div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">黄色</div>
         <div class="cc-motto">“没有越不过的障碍！能者为先。”</div>
         <div class="cc-line">长处 <b>让任何人贯彻自己的意图</b></div>
         <div class="cc-line">短处 <b>忽视过程和他人感受</b></div>
         <div class="cc-line">动机 <b>挑战 · 选择 · 控制</b></div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">绿色</div>
         <div class="cc-motto">“不求快，但求稳。”</div>
         <div class="cc-line">长处 <b>易于相处</b></div>
@@ -591,18 +593,18 @@
     <div class="kicker" data-anim style="color:#D4594A">红色性格 · 核心档案</div>
     <h2 class="h-xl" data-anim>“让我使你高兴！”</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">最大的长处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>其乐融融</b></div>
         <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>三心二意</b></div>
       </div>
       <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
-        <div class="cc" style="--cc:#D4594A">
+        <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F">
           <div class="cc-name">基本动机</div>
           <div class="cc-line">快乐 · 赞美 · 受欢迎</div>
         </div>
-        <div class="cc" style="--cc:#D4594A">
+        <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F">
           <div class="cc-name">对外界的需求</div>
           <div class="cc-line">声望 · 友好的人际关系 · 影响鼓舞他人的机会</div>
         </div>
@@ -624,11 +626,11 @@
     <div class="kicker" data-anim>优势用过头，就是过当</div>
     <h2 class="h-xl" data-anim>红色：优势 与 优势过当</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">优势</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">善于交际</div><div class="li">积极乐观</div><div class="li">信任他人</div><div class="li">创造快乐</div><div class="li">富有色彩</div><div class="li">表达力强</div></div>
       </div>
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">情绪波动</div><div class="li">缺少秩序</div><div class="li">难以兑现</div><div class="li">半途而废</div><div class="li">没有计划</div><div class="li">言过其实</div></div>
       </div>
@@ -650,15 +652,15 @@
     <h2 class="h-xl" data-anim style="color:#D4594A">克林顿</h2>
     <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>演讲的高手，爱好广泛，虽然经历了莱温斯基事件，仍旧无法阻止他在全球的影响力；在离开政坛以后他仍旧活跃，在当前的驴象之争中仍旧积极为民主党煽风点火。</p>
     <div class="grid-3" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">发挥优势时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">提供帮助和指导给有需要的人</div><div class="li">强烈拥护团队和组织的价值观与目标</div><div class="li">设下很美好的远景并全力以赴</div></div>
       </div>
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">严密控制</div><div class="li">全面的程序条理和方法</div><div class="li">付诸逻辑事实和系统</div></div>
       </div>
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">运用优势得当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">愿意培训属下和团队成员</div><div class="li">对环境的压力和要求很敏感</div><div class="li">提供帮助给组织内外的人</div><div class="li">自告奋勇的积极团队奉献者</div></div>
       </div>
@@ -678,7 +680,7 @@
   <div class="frame" style="padding-top:5vh">
     <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
       <div class="kicker" data-anim>Act 2</div>
-      <h1 class="h-hero" style="font-size:8.5vw;color:#4A6FA5" data-anim>蓝色</h1>
+      <h1 class="h-hero" style="font-size:8.5vw;color:{tone}" data-anim>蓝色</h1>
       <p class="lead" style="max-width:52vw" data-anim>“没有最好，只有更好”</p>
     </div>
   </div>
@@ -697,18 +699,18 @@
     <div class="kicker" data-anim style="color:#4A6FA5">蓝色性格 · 核心档案</div>
     <h2 class="h-xl" data-anim>“没有最好，只有更好”</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">最大的长处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>追求完美</b></div>
         <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>过于苛刻</b></div>
       </div>
       <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
-        <div class="cc" style="--cc:#4A6FA5">
+        <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0">
           <div class="cc-name">基本动机</div>
           <div class="cc-line">卓越 · 价值 · 高质量</div>
         </div>
-        <div class="cc" style="--cc:#4A6FA5">
+        <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0">
           <div class="cc-name">对外界的需求</div>
           <div class="cc-line">明确的解释 · 有限的风险 · 要求计划性和精确性的任务</div>
         </div>
@@ -730,11 +732,11 @@
     <div class="kicker" data-anim>优势用过头，就是过当</div>
     <h2 class="h-xl" data-anim>蓝色：优势 与 优势过当</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">优势</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">高度敏感</div><div class="li">善于分析</div><div class="li">品质至上</div><div class="li">原则性强</div><div class="li">思想深沉</div><div class="li">稳健谦和</div></div>
       </div>
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">行动缓慢</div><div class="li">抓小失大</div><div class="li">要求苛刻</div><div class="li">灵活性差</div><div class="li">冷漠严肃</div><div class="li">过于小心</div></div>
       </div>
@@ -756,15 +758,15 @@
     <h2 class="h-xl" data-anim style="color:#4A6FA5">爱迪生</h2>
     <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>最伟大的发明家，为寻求一个方案，可以做几百次实验毫不放弃。在关于白炽灯的研究过程中他的名言是：没有放弃的原因是因为我发现了 2000 次它不发光的原因。他的工厂每个人前面的座右铭是：“有更好的方法…去发现它”。</p>
     <div class="grid-3" style="margin-top:5vh">
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">发挥优势时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">解析问题及提供事实逻辑，以有条理的方式得到解决方法</div><div class="li">寻求对资源最有效的利用</div><div class="li">放弃前会探询其他所有可能性</div></div>
       </div>
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">所有问题考虑前不愿采取行动</div><div class="li">原则性太强，不易妥协</div></div>
       </div>
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">运用优势得当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">制定计划</div><div class="li">督控工作事项</div><div class="li">拟定程序</div></div>
       </div>
@@ -784,7 +786,7 @@
   <div class="frame" style="padding-top:5vh">
     <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
       <div class="kicker" data-anim>Act 3</div>
-      <h1 class="h-hero" style="font-size:8.5vw;color:#C8922A" data-anim>黄色</h1>
+      <h1 class="h-hero" style="font-size:8.5vw;color:{tone}" data-anim>黄色</h1>
       <p class="lead" style="max-width:52vw" data-anim>“没有越不过的障碍！能者为先。”</p>
     </div>
   </div>
@@ -803,18 +805,18 @@
     <div class="kicker" data-anim style="color:#C8922A">黄色性格 · 核心档案</div>
     <h2 class="h-xl" data-anim>“没有越不过的障碍！能者为先。”</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#C8922A" data-anim>
+      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">最大的长处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>让任何人贯彻自己的意图</b></div>
         <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>忽视过程和他人感受</b></div>
       </div>
       <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
-        <div class="cc" style="--cc:#C8922A">
+        <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558">
           <div class="cc-name">基本动机</div>
           <div class="cc-line">挑战 · 选择 · 控制</div>
         </div>
-        <div class="cc" style="--cc:#C8922A">
+        <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558">
           <div class="cc-name">对外界的需求</div>
           <div class="cc-line">权威 · 艰巨的任务 · 进取的机会</div>
         </div>
@@ -836,11 +838,11 @@
     <div class="kicker" data-anim>优势用过头，就是过当</div>
     <h2 class="h-xl" data-anim>黄色：优势 与 优势过当</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#C8922A" data-anim>
+      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">优势</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">目标导向</div><div class="li">领导力强</div><div class="li">追求效率</div><div class="li">坚持到底</div><div class="li">独立意识</div><div class="li">敢于冒险</div></div>
       </div>
-      <div class="cc" style="--cc:#C8922A" data-anim>
+      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">自负骄傲</div><div class="li">缺乏耐心</div><div class="li">感受第二</div><div class="li">倍感压力</div><div class="li">忽略人际</div><div class="li">行为冲动</div></div>
       </div>
@@ -862,15 +864,15 @@
     <h2 class="h-xl" data-anim style="color:#C8922A">邱吉尔</h2>
     <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>永不放弃！永不放弃！永不放弃！！！</p>
     <div class="grid-3" style="margin-top:5vh">
-      <div class="cc" style="--cc:#C8922A" data-anim>
+      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">发挥优势时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">开创行动导向</div><div class="li">喜欢讨论意见</div><div class="li">变革中觉得自然，并极力推动</div><div class="li">有决断并愿冒风险</div></div>
       </div>
-      <div class="cc" style="--cc:#C8922A" data-anim>
+      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">不容忍别人的意见和想法</div><div class="li">权威化，不易妥协</div><div class="li">意气用事</div></div>
       </div>
-      <div class="cc" style="--cc:#C8922A" data-anim>
+      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">运用优势得当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">推动计划的实施</div><div class="li">指挥一个任务和计划</div><div class="li">组织动员人力和资源</div></div>
       </div>
@@ -890,7 +892,7 @@
   <div class="frame" style="padding-top:5vh">
     <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
       <div class="kicker" data-anim>Act 4</div>
-      <h1 class="h-hero" style="font-size:8.5vw;color:#3A8E6A" data-anim>绿色</h1>
+      <h1 class="h-hero" style="font-size:8.5vw;color:{tone}" data-anim>绿色</h1>
       <p class="lead" style="max-width:52vw" data-anim>“不求快，但求稳。”</p>
     </div>
   </div>
@@ -909,18 +911,18 @@
     <div class="kicker" data-anim style="color:#3A8E6A">绿色性格 · 核心档案</div>
     <h2 class="h-xl" data-anim>“不求快，但求稳。”</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">最大的长处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>易于相处</b></div>
         <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>怯懦</b></div>
       </div>
       <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
-        <div class="cc" style="--cc:#3A8E6A">
+        <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98">
           <div class="cc-name">基本动机</div>
           <div class="cc-line">安全感 · 欣赏 · 保障</div>
         </div>
-        <div class="cc" style="--cc:#3A8E6A">
+        <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98">
           <div class="cc-name">对外界的需求</div>
           <div class="cc-line">群体认同 · 既定的工作模式 · 稳定的情况</div>
         </div>
@@ -942,11 +944,11 @@
     <div class="kicker" data-anim>优势用过头，就是过当</div>
     <h2 class="h-xl" data-anim>绿色：优势 与 优势过当</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">优势</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">人际导向</div><div class="li">宽容处事</div><div class="li">善于外交</div><div class="li">适应性强</div><div class="li">擅对压力</div><div class="li">乐天知命</div></div>
       </div>
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh"><div class="li">牺牲目标</div><div class="li">放弃原则</div><div class="li">不够快速</div><div class="li">没有主见</div><div class="li">旁观免参</div><div class="li">避难求易</div></div>
       </div>
@@ -968,15 +970,15 @@
     <h2 class="h-xl" data-anim style="color:#3A8E6A">福特</h2>
     <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>最好把他当作一位世界外交官，而不是一个精明的政治家。他流露的是仁慈和宁静的尊严，他从不显露出狂热的个人主义，只是静悄悄地行走。</p>
     <div class="grid-3" style="margin-top:5vh">
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">发挥优势时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">处理人际关系手腕高明</div><div class="li">耐心且适应性强</div></div>
       </div>
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">冲突无法解决</div><div class="li">改变立场，不坚持自己的原则</div></div>
       </div>
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">运用优势得当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">必须传达敏感或为难的信息时</div><div class="li">需要能借协商而化解冲突的情况</div></div>
       </div>
@@ -997,19 +999,19 @@
     <div class="kicker" data-anim>放在一起看</div>
     <h2 class="h-xl" data-anim>四种色彩在团队里的样子</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">红色</div>
         <div class="cc-line" style="margin-top:1vh">特别适合解决方方面面都要照顾或需一些新颖的办法来解决问题</div>
         <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：容易各行其是，每个成员朝不同方向走，善于出谋划策但不善于贯彻执行，善始善终</div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">蓝色</div>
         <div class="cc-line" style="margin-top:1vh">属于细致入微、一丝不苟的完美主义者</div>
         <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：容易过分计较小节而贻误大局</div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">黄色</div>
         <div class="cc-line" style="margin-top:1vh">工作效率高，喜欢迎接挑战，遇事时喜欢当机立断</div>
         <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：过于看重速度、效率，对问题和情况的分析缺乏耐心，常会忽略一些中间环节</div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">绿色</div>
         <div class="cc-line" style="margin-top:1vh">善于合作、协同配合，及回避成员间的明争暗斗</div>
         <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：成员间彼此不会靠得太近，工作群体容易迷失方向</div>
@@ -1031,16 +1033,16 @@
     <div class="kicker" data-anim>减少耗费在人际关系上的精力</div>
     <h2 class="h-xl" data-anim>怎么和每种色彩沟通</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">和红色沟通</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">采用幽默的方式</div><div class="li">用理想化的表达方式</div><div class="li">要求他们协助</div><div class="li">表示重视</div></div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">和蓝色沟通</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">运用逻辑与结构</div><div class="li">找出新旧事物的关联</div><div class="li">提供分析的机会</div><div class="li">提出低风险的构想</div></div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">和黄色沟通</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">提供机会</div><div class="li">强调挑战性</div><div class="li">赋予更多责任授权</div></div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">和绿色沟通</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh"><div class="li">提供与别人共事的机会</div><div class="li">让他们知道你高兴</div><div class="li">强调值得做的理由</div></div>
       </div>
@@ -1061,28 +1063,28 @@
     <div class="kicker" data-anim>向上与向下</div>
     <h2 class="h-xl" data-anim>如何影响上司 · 如何带领部属</h2>
     <div class="grid-4" style="margin-top:3vh">
-      <div class="cc cc-tight" style="--cc:#D4594A" data-anim>
+      <div class="cc cc-tight" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">上司：怎么影响 TA</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">善于交际</div><div class="li">精通世故</div><div class="li">团队为重</div></div>
         <div class="cc-sep">
           <div class="cc-name">部属：怎么带 TA</div>
           <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">给予肯定、信任与赞赏</div><div class="li">展现幽默感</div><div class="li">具有弹性</div><div class="li">给予有助益的回应</div></div>
         </div>
-      </div>      <div class="cc cc-tight" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc cc-tight" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">上司：怎么影响 TA</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">遵循规章</div><div class="li">讲求逻辑</div><div class="li">专心一致</div></div>
         <div class="cc-sep">
           <div class="cc-name">部属：怎么带 TA</div>
           <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">条理分明，目的清楚</div><div class="li">重视细节，有系统性</div><div class="li">客观合理，前后一致</div></div>
         </div>
-      </div>      <div class="cc cc-tight" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc cc-tight" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">上司：怎么影响 TA</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">迅速反应</div><div class="li">独立作业</div><div class="li">直接了当</div></div>
         <div class="cc-sep">
           <div class="cc-name">部属：怎么带 TA</div>
           <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">表现自信</div><div class="li">在平等基础上争论</div><div class="li">奖励成果</div><div class="li">提供自主机会</div></div>
         </div>
-      </div>      <div class="cc cc-tight" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc cc-tight" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">上司：怎么影响 TA</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">表达忠诚</div><div class="li">态度真诚</div><div class="li">处事技巧</div></div>
         <div class="cc-sep">
@@ -1107,16 +1109,16 @@
     <div class="kicker" data-anim>让优势发挥得更好</div>
     <h2 class="h-xl" data-anim>职业发展方向</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">适合的方向</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">热情待人</div><div class="li">热切表达自己的想法</div><div class="li">容易吸引人注意</div></div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">适合的方向</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">留意细节，思考深刻</div><div class="li">记录、制图、制表</div><div class="li">分析别人弄不清的问题</div></div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">适合的方向</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">需要迅速做出抉择</div><div class="li">必须尽快完成的事情</div><div class="li">要求强烈的控制力</div><div class="li">和权威的领域</div></div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">适合的方向</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">调节和团结的角色</div><div class="li">平静风暴的最佳人选</div><div class="li">别人认为沉闷的日常例行工作</div></div>
       </div>
@@ -1137,16 +1139,16 @@
     <div class="kicker" data-anim>带人也有色彩</div>
     <h2 class="h-xl" data-anim>领导品质和风格</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">领导品质和风格</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">民主化的领导者和朋友</div><div class="li">提供工作之外的社交环境</div><div class="li">对能力给予充分认可</div><div class="li">营造兴奋的气氛</div></div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">领导品质和风格</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">给予保障</div><div class="li">明确的执行标准</div><div class="li">注重细节</div><div class="li">公平公正</div></div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">领导品质和风格</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">提供直接的答复</div><div class="li">强调目标</div><div class="li">提供适当的压力</div><div class="li">提供个人成长的空间</div></div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">领导品质和风格</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">和蔼可亲</div><div class="li">给予时间去适应计划中的变化</div><div class="li">友善地服务他人</div><div class="li">允许别人按照自己的步调工作</div></div>
       </div>
@@ -1167,16 +1169,16 @@
     <div class="kicker" data-anim>换个位置看</div>
     <h2 class="h-xl" data-anim>作为客户，他们是什么样</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">作为客户</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">不喜欢冲突</div><div class="li">热情有加</div><div class="li">关心自己的形象，在意别人的赞美</div><div class="li">喜欢革新，讨厌陈旧</div><div class="li">对色彩性的描述有兴趣</div></div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">作为客户</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">需要了解产品的工作程序</div><div class="li">喜欢解决问题的过程</div><div class="li">喜欢自己的精确谨慎受到别人的推崇</div><div class="li">更喜欢由他们自己来完成任务</div></div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">作为客户</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">务实不务虚</div><div class="li">欢迎变化和新的机遇</div><div class="li">害怕强卖</div><div class="li">对感情态度和观念保持低调</div><div class="li">独立、有进取心</div></div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">作为客户</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">对冲突的忍耐力极低</div><div class="li">尽可能回避风险和变革</div><div class="li">需要一步步知道自己期望什么</div><div class="li">需要知道他们将得到支持</div><div class="li">没有推动和难做决定</div></div>
       </div>
@@ -1197,16 +1199,16 @@
     <div class="kicker" data-anim>出了问题时</div>
     <h2 class="h-xl" data-anim>客户抱怨时，他们需要什么</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">抱怨时需要什么</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">对他们个人的注意</div><div class="li">快节奏</div><div class="li">显示他们的地位</div><div class="li">看到不必投入更多努力</div><div class="li">口头“交易”口角</div></div>
-      </div>      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">抱怨时需要什么</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">表明他们是对的</div><div class="li">把这件事情的过程和细节和盘向他们托出</div><div class="li">欣赏他们的认真和精益求精的作风</div><div class="li">确保公正和公平</div></div>
-      </div>      <div class="cc" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">抱怨时需要什么</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">实质性的进展</div><div class="li">快节奏</div><div class="li">他们控制了局势</div><div class="li">结果</div><div class="li">节省时间</div></div>
-      </div>      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">抱怨时需要什么</div>
         <div style="margin-top:1.2vh;display:grid;gap:.45vh"><div class="li">保证他们个人没事</div><div class="li">承诺危机很快会结束</div><div class="li">向他们建议，一起努力来解决问题</div><div class="li">表明你们的关系将不会受到影响</div></div>
       </div>
@@ -1227,16 +1229,16 @@
     <div class="kicker" data-anim>课堂上与组织里</div>
     <h2 class="h-xl" data-anim>培训中的表现</h2>
     <div class="grid-4" style="margin-top:5vh">
-      <div class="cc cc-tight" style="--cc:#D4594A" data-anim>
+      <div class="cc cc-tight" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">培训中的表现</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">充满热忱能感染别人</div><div class="li">想象力非常丰富</div><div class="li">花样百出的人</div><div class="li">非常幽默</div><div class="li">故事讲得非常精彩</div><div class="li">只要和人在一起，马上就充满活力</div></div>
-      </div>      <div class="cc cc-tight" style="--cc:#4A6FA5" data-anim>
+      </div>      <div class="cc cc-tight" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">培训中的表现</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">很注重事情的精确性</div><div class="li">喜欢仔细思索后再发言</div><div class="li">经常表现严肃</div><div class="li">有好质疑的头脑</div><div class="li">对关键性的细节很感兴趣</div><div class="li">享受自己独处的时间</div></div>
-      </div>      <div class="cc cc-tight" style="--cc:#C8922A" data-anim>
+      </div>      <div class="cc cc-tight" style="--cc:#C8922A;--cc-d:#7A5406;--cc-l:#E5B558" data-anim>
         <div class="cc-name">培训中的表现</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">很有自信和见解</div><div class="li">不容易分心</div><div class="li">据实说出自己的想法</div><div class="li">不会屈服于强势，做自己不愿做的事</div><div class="li">坦白直率</div><div class="li">精力旺盛</div></div>
-      </div>      <div class="cc cc-tight" style="--cc:#3A8E6A" data-anim>
+      </div>      <div class="cc cc-tight" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">培训中的表现</div>
         <div style="margin-top:1vh;display:grid;gap:.3vh"><div class="li">有一种可以使他人镇静的影响力</div><div class="li">不喜欢冲突和惹事生非</div><div class="li">有耐心善解人意的听众</div><div class="li">按部就班，毫不急躁</div><div class="li">善于关怀和接纳</div><div class="li">喜欢事情的作法被一步步解说清楚</div></div>
       </div>
@@ -1285,15 +1287,15 @@
     <div class="kicker" data-anim>带上这三句话走</div>
     <h2 class="h-xl" data-anim>了解自己 · 理解他人 · 高效协作</h2>
     <div class="grid-3" style="margin-top:6vh">
-      <div class="cc" style="--cc:#D4594A" data-anim>
+      <div class="cc" style="--cc:#D4594A;--cc-d:#A03325;--cc-l:#E8836F" data-anim>
         <div class="cc-name">先看清自己</div>
         <div class="cc-line">你的长处是什么，它用过头会变成什么样。</div>
       </div>
-      <div class="cc" style="--cc:#4A6FA5" data-anim>
+      <div class="cc" style="--cc:#4A6FA5;--cc-d:#2C4E75;--cc-l:#9AB9E0" data-anim>
         <div class="cc-name">再理解他人</div>
         <div class="cc-line">别人不是针对你，他只是另一种颜色。</div>
       </div>
-      <div class="cc" style="--cc:#3A8E6A" data-anim>
+      <div class="cc" style="--cc:#3A8E6A;--cc-d:#1F5D43;--cc-l:#6FBF98" data-anim>
         <div class="cc-name">最后换方式</div>
         <div class="cc-line">用对方需要的方式沟通，而不是你自己习惯的方式。</div>
       </div>

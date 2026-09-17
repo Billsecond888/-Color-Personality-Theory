@@ -37,8 +37,10 @@ EXTRA_CSS = """
     margin-top:.9vh;line-height:1.5}
   /* ---- 四色卡：左侧色条 + 色名 ---- */
   .cc{border-left:3px solid var(--cc,var(--ink));padding:1.6vh 1.4vw;background:var(--paper-tint)}
+  .slide.dark .cc{background:var(--ink-tint)}
   .cc-name{font-family:var(--serif-zh);font-size:max(17px,1.5vw);font-weight:600;
-    color:var(--cc,var(--ink));letter-spacing:.02em}
+    color:var(--cc-d,var(--ink));letter-spacing:.02em}
+  .slide.dark .cc-name{color:var(--cc-l,var(--paper))}
   .cc-motto{font-family:var(--sans-zh);font-size:max(12px,.95vw);opacity:.6;
     font-style:italic;margin-top:.5vh}
   .cc-line{font-family:var(--sans-zh);font-size:max(12.5px,1vw);line-height:1.75;
@@ -63,6 +65,22 @@ FAVICON = ('<link rel="icon" href="data:image/svg+xml,'
            "%3Ccircle cx='9' cy='23' r='6' fill='%23C8922A'/%3E"
            "%3Ccircle cx='23' cy='23' r='6' fill='%233A8E6A'/%3E"
            '%3C/svg%3E">')
+
+
+# 四色在不同底色的文字版本（原色只用于色条和圆点这类装饰）
+# 深版：浅底卡片上的文字；亮版：深底卡片上的文字。均按 WCAG AA(4.5:1) 选过
+TONE = {
+    "#D4594A": ("#A03325", "#E8836F"),   # 红
+    "#4A6FA5": ("#2C4E75", "#9AB9E0"),   # 蓝
+    "#C8922A": ("#7A5406", "#E5B558"),   # 黄
+    "#3A8E6A": ("#1F5D43", "#6FBF98"),   # 绿
+}
+
+
+def cvars(col):
+    """生成卡片用的三个 CSS 变量：--cc 装饰色 / --cc-d 浅底文字 / --cc-l 深底文字"""
+    d, l = TONE.get(col, (col, col))
+    return f'--cc:{col};--cc-d:{d};--cc-l:{l}'
 
 
 def esc(s):
@@ -123,7 +141,7 @@ def build(colors, order):
 
     # ---- 2 四色总览 ----
     cards = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">{esc(cs[k]["name"])}</div>\n'
         f'        <div class="cc-motto">{esc(cs[k]["motto"])}</div>\n'
         f'        <div class="cc-line">长处 <b>{esc(cs[k]["maxStrength"])}</b></div>\n'
@@ -150,12 +168,13 @@ def build(colors, order):
         # 幕封（红色不用幕封，第 3 页直接进）
         if idx > 0:
             theme = "hero light" if idx % 2 == 1 else "hero dark"
+            tone = TONE[col][0] if theme == "hero light" else TONE[col][1]
             add(slide(
                 (theme, ""),
                 f"色彩解析 · {nm}", f"Act {idx + 1} · {base} / {len(order) * 3 + 8}",
                 f"""    <div class="frame" style="display:grid;gap:6vh;align-content:center;min-height:78vh">
       <div class="kicker" data-anim>Act {idx + 1}</div>
-      <h1 class="h-hero" style="font-size:8.5vw;color:{col}" data-anim>{esc(nm)}</h1>
+      <h1 class="h-hero" style="font-size:8.5vw;color:{'{tone}'}" data-anim>{esc(nm)}</h1>
       <p class="lead" style="max-width:52vw" data-anim>{esc(c["motto"])}</p>
     </div>""",
                 f"{nm}性格解析", f"Act {idx + 1}"))
@@ -168,18 +187,18 @@ def build(colors, order):
             f"""    <div class="kicker" data-anim style="color:{col}">{esc(nm)}性格 · 核心档案</div>
     <h2 class="h-xl" data-anim>{esc(c["motto"])}</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:{col}" data-anim>
+      <div class="cc" style="{cvars(col)}" data-anim>
         <div class="cc-name">最大的长处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>{esc(c["maxStrength"])}</b></div>
         <div class="cc-name" style="margin-top:2.5vh">最大的短处</div>
         <div class="cc-line" style="font-size:max(16px,1.5vw)"><b>{esc(c["maxWeakness"])}</b></div>
       </div>
       <div style="display:grid;gap:2.6vh;align-content:start" data-anim>
-        <div class="cc" style="--cc:{col}">
+        <div class="cc" style="{cvars(col)}">
           <div class="cc-name">基本动机</div>
           <div class="cc-line">{esc(" · ".join(c["basicMotivation"]))}</div>
         </div>
-        <div class="cc" style="--cc:{col}">
+        <div class="cc" style="{cvars(col)}">
           <div class="cc-name">对外界的需求</div>
           <div class="cc-line">{esc(" · ".join(c["needsFromOutside"]))}</div>
         </div>
@@ -194,11 +213,11 @@ def build(colors, order):
             f"""    <div class="kicker" data-anim>优势用过头，就是过当</div>
     <h2 class="h-xl" data-anim>{esc(nm)}：优势 与 优势过当</h2>
     <div class="grid-2-6-6" style="margin-top:5vh">
-      <div class="cc" style="--cc:{col}" data-anim>
+      <div class="cc" style="{cvars(col)}" data-anim>
         <div class="cc-name">优势</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh">{lis(c["strengths"])}</div>
       </div>
-      <div class="cc" style="--cc:{col}" data-anim>
+      <div class="cc" style="{cvars(col)}" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当</div>
         <div style="margin-top:1.5vh;display:grid;gap:.5vh">{lis(c["overuses"])}</div>
       </div>
@@ -214,15 +233,15 @@ def build(colors, order):
     <h2 class="h-xl" data-anim style="color:{col}">{esc(c["figure"]["name"])}</h2>
     <p class="lead" style="max-width:66vw;margin-top:1.5vh" data-anim>{esc(c["figure"]["desc"])}</p>
     <div class="grid-3" style="margin-top:5vh">
-      <div class="cc" style="--cc:{col}" data-anim>
+      <div class="cc" style="{cvars(col)}" data-anim>
         <div class="cc-name">发挥优势时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh">{lis(tc["whenStrength"])}</div>
       </div>
-      <div class="cc" style="--cc:{col}" data-anim>
+      <div class="cc" style="{cvars(col)}" data-anim>
         <div class="cc-name" style="opacity:.62">优势过当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh">{lis(tc["whenOveruse"])}</div>
       </div>
-      <div class="cc" style="--cc:{col}" data-anim>
+      <div class="cc" style="{cvars(col)}" data-anim>
         <div class="cc-name">运用优势得当时</div>
         <div style="margin-top:1.2vh;display:grid;gap:.4vh">{lis(tc["whenApplied"])}</div>
       </div>
@@ -234,7 +253,7 @@ def build(colors, order):
 
     # ---- 四色对比 ----
     rows = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">{esc(cs[k]["name"])}</div>\n'
         f'        <div class="cc-line" style="margin-top:1vh">{esc(cs[k]["teamwork"]["strength"])}</div>\n'
         f'        <div class="cc-line" style="opacity:.65;margin-top:1.2vh">过当：{esc(cs[k]["teamwork"]["overuse"])}</div>\n'
@@ -251,7 +270,7 @@ def build(colors, order):
 
     # ---- 沟通方式 ----
     rows = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">和{esc(cs[k]["name"])}沟通</div>\n'
         f'        <div style="margin-top:1.2vh;display:grid;gap:.4vh">{lis(cs[k]["howToCommunicate"])}</div>\n'
         f'      </div>' for k in order)
@@ -267,7 +286,7 @@ def build(colors, order):
 
     # ---- 上司与部属 ----
     boss = "".join(
-        f'      <div class="cc cc-tight" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc cc-tight" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">上司：怎么影响 TA</div>\n'
         f'        <div style="margin-top:1vh;display:grid;gap:.3vh">{lis(cs[k]["howToInfluenceBoss"])}</div>\n'
         f'        <div class="cc-sep">\n'
@@ -288,7 +307,7 @@ def build(colors, order):
 
     # ---- 职业与领导风格 ----
     rows = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">适合的方向</div>\n'
         f'        <div style="margin-top:1.2vh;display:grid;gap:.45vh">{lis(cs[k]["careerDirection"])}</div>\n'
         f'      </div>' for k in order)
@@ -303,7 +322,7 @@ def build(colors, order):
         "FPA®职业生涯规划", "Career"))
 
     rows = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">领导品质和风格</div>\n'
         f'        <div style="margin-top:1.2vh;display:grid;gap:.45vh">{lis(cs[k]["leadershipStyle"])}</div>\n'
         f'      </div>' for k in order)
@@ -319,7 +338,7 @@ def build(colors, order):
 
     # ---- 客户视角 ----
     a = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">作为客户</div>\n'
         f'        <div style="margin-top:1.2vh;display:grid;gap:.45vh">{lis(cs[k]["asCustomer"])}</div>\n'
         f'      </div>' for k in order)
@@ -334,7 +353,7 @@ def build(colors, order):
         "FPA®销售", "Customer"))
 
     b = "".join(
-        f'      <div class="cc" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">抱怨时需要什么</div>\n'
         f'        <div style="margin-top:1.2vh;display:grid;gap:.45vh">{lis(cs[k]["whenComplaining"])}</div>\n'
         f'      </div>' for k in order)
@@ -350,7 +369,7 @@ def build(colors, order):
 
     # ---- 培训表现 ----
     rows = "".join(
-        f'      <div class="cc cc-tight" style="--cc:{cs[k]["color"]}" data-anim>\n'
+        f'      <div class="cc cc-tight" style="{cvars(cs[k]['color'])}" data-anim>\n'
         f'        <div class="cc-name">培训中的表现</div>\n'
         f'        <div style="margin-top:1vh;display:grid;gap:.3vh">{lis(cs[k]["inTraining"])}</div>\n'
         f'      </div>' for k in order)
@@ -392,15 +411,15 @@ def build(colors, order):
         f"""    <div class="kicker" data-anim>带上这三句话走</div>
     <h2 class="h-xl" data-anim>了解自己 · 理解他人 · 高效协作</h2>
     <div class="grid-3" style="margin-top:6vh">
-      <div class="cc" style="--cc:{cs['red']['color']}" data-anim>
+      <div class="cc" style="{cvars(cs['red']['color'])}" data-anim>
         <div class="cc-name">先看清自己</div>
         <div class="cc-line">你的长处是什么，它用过头会变成什么样。</div>
       </div>
-      <div class="cc" style="--cc:{cs['blue']['color']}" data-anim>
+      <div class="cc" style="{cvars(cs['blue']['color'])}" data-anim>
         <div class="cc-name">再理解他人</div>
         <div class="cc-line">别人不是针对你，他只是另一种颜色。</div>
       </div>
-      <div class="cc" style="--cc:{cs['green']['color']}" data-anim>
+      <div class="cc" style="{cvars(cs['green']['color'])}" data-anim>
         <div class="cc-name">最后换方式</div>
         <div class="cc-line">用对方需要的方式沟通，而不是你自己习惯的方式。</div>
       </div>
